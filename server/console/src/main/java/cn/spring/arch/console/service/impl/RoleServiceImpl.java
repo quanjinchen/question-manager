@@ -275,8 +275,6 @@ public class RoleServiceImpl implements RoleService {
             dto.setEmail(user.getEmail());
             dto.setPhone(user.getPhone() == null ? null : user.getPhone().getPlainText());
             dto.setIdCard(user.getIdCard() == null ? null : user.getIdCard().getPlainText());
-            dto.setFaceFileId(user.getFaceFileId());
-            dto.setFaceFeature(user.getFaceFeature());
             dto.setStatus(user.getStatus());
             result.add(dto);
         }

@@ -32,14 +32,10 @@ sa-token:
   token-style: uuid
   servlet-filter:
     exclude-paths:
-      - /face/query-account
-      - /auth/face/query-account
+      - /auth/query-account
       - /auth/register-account
-      - /auth/face/register-account
-      - /face/get-cert-token
-      - /auth/face/get-cert-token
+      - /auth/get-cert-token
       - /auth/get-auth-result
-      - /auth/face/get-auth-result
       - /swagger-ui.html
       - /swagger-ui/**
       - /v3/api-docs/**
@@ -65,14 +61,10 @@ project:
   web:
     interceptor:
       exclude-paths:
-        - /face/query-account
-        - /auth/face/query-account
+        - /auth/query-account
         - /auth/register-account
-        - /auth/face/register-account
         - /auth/get-cert-token
-        - /auth/face/get-cert-token
         - /auth/get-auth-result
-        - /auth/face/get-auth-result
         - /swagger-ui.html
         - /swagger-ui/**
         - /v3/api-docs/**
@@ -90,15 +82,9 @@ project:
     bucket-name: spring-scaffold
     path-style-access-enabled: true
     public-url-prefix: ""
-  face:
-    model-dir: config/model
-    detector-model: face_detector.csta
-    landmarker-model: face_landmarker_pts5.csta
-    recognizer-model: face_recognizer_light.csta
   auth:
     auth-url-prefix: https://xxxx.com/auth
     cert-token-expire-seconds: 600
-    face-match-threshold: 0.75
   log:
     path: ${PROJECT_LOG_PATH:./logs}
     max-history: ${PROJECT_LOG_MAX_HISTORY:30}

@@ -17,10 +17,6 @@ public class AccountRegisterReqParam {
     @NotBlank(message = "姓名不能为空")
     private String fullName;
 
-    @Schema(description = "人脸图片 base64，支持 data url 或纯 base64", required = true, example = "data:image/png;base64,xxxx")
-    @NotBlank(message = "人脸图片 base64 不能为空")
-    private String faceImageBase64;
-
     @Schema(description = "认证令牌", required = true, example = "3f1d6b5a9c")
     @NotBlank(message = "certToken 不能为空")
     private String certToken;

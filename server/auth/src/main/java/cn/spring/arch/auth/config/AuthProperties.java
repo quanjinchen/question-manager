@@ -19,8 +19,4 @@ public class AuthProperties {
      */
     private Long certTokenExpireSeconds = 600L;
 
-    /**
-     * 人脸认证通过阈值。
-     */
-    private Float faceMatchThreshold = 0.75F;
 }

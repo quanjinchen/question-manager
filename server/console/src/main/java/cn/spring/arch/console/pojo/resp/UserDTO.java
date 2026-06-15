@@ -25,12 +25,6 @@ public class UserDTO {
     @Schema(description = "身份证号")
     private String idCard;
 
-    @Schema(description = "人脸文件 ID")
-    private String faceFileId;
-
-    @Schema(description = "人脸特征值")
-    private String faceFeature;
-
     @Schema(description = "状态，1 启用，0 禁用")
     private Integer status;
 }

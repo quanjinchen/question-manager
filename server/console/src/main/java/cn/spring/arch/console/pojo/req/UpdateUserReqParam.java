@@ -30,12 +30,6 @@ public class UpdateUserReqParam {
     @NotBlank(message = "身份证号不能为空")
     private String idCard;
 
-    @Schema(description = "人脸图片 base64", example = "data:image/png;base64,xxxx")
-    private String faceBase64;
-
-    @Schema(description = "人脸文件 ID", example = "202605120001")
-    private String faceFileId;
-
     @Schema(description = "状态，1 启用，0 禁用", example = "1")
     private Integer status;
 }

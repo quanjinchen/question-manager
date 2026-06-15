@@ -19,6 +19,4 @@ public class CertUserDTO {
     @Schema(description = "手机号")
     private String phone;
 
-    @Schema(description = "本次认证图片 base64")
-    private String faceImageBase64;
 }

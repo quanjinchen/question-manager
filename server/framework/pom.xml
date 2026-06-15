@@ -57,13 +57,6 @@
             <version>3.3.2</version>
         </dependency>
         <dependency>
-            <groupId>com.seeta.sdk</groupId>
-            <artifactId>seeta-sdk-platform</artifactId>
-            <version>1.2.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/seeta-sdk-platform-1.2.1.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
         </dependency>

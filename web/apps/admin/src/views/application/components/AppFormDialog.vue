@@ -48,17 +48,6 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="允许人脸自注册" prop="allowFaceSelfRegister">
-            <AppSwitch
-              v-model="formData.allowFaceSelfRegister"
-              :switch-props="{
-                activeText: '允许',
-                inactiveText: '不允许',
-              }"
-            />
-          </el-form-item>
-        </el-col>
         <el-col :span="24">
           <el-form-item label="备注" prop="remark">
             <AppInput
@@ -81,7 +70,7 @@ import type { FormInstance } from 'element-plus';
 import { $apis } from '@/api/requests';
 import type { AppRecord } from '@/types/domain';
 
-type AppFormData = Pick<AppRecord, 'appName' | 'appCode' | 'clientId' | 'clientSecret' | 'allowFaceSelfRegister' | 'remark'>;
+type AppFormData = Pick<AppRecord, 'appName' | 'appCode' | 'clientId' | 'clientSecret' | 'remark'>;
 
 const props = defineProps<{
   modelValue: boolean;
@@ -119,7 +108,6 @@ const dataInfo = reactive({
     appCode: '',
     clientId: '',
     clientSecret: '',
-    allowFaceSelfRegister: false,
     remark: '',
   } as AppFormData,
   rules: {
@@ -137,7 +125,6 @@ const dataInfo = reactive({
       appCode: '',
       clientId: '',
       clientSecret: '',
-      allowFaceSelfRegister: false,
       remark: '',
     };
     formRef.value?.clearValidate();
@@ -157,7 +144,6 @@ const dataInfo = reactive({
         appCode: detail?.appCode ?? '',
         clientId: detail?.clientId ?? '',
         clientSecret: detail?.clientSecret ?? '',
-        allowFaceSelfRegister: Boolean(detail?.allowFaceSelfRegister),
         remark: detail?.remark ?? '',
       };
     } finally {
@@ -169,7 +155,6 @@ const dataInfo = reactive({
       id: this.isEdit ? Number(props.selectItem?.id) : undefined,
       appName: this.formData.appName,
       appCode: this.formData.appCode,
-      allowFaceSelfRegister: this.formData.allowFaceSelfRegister,
       remark: this.formData.remark ?? '',
     };
   },

@@ -94,14 +94,6 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public List<User> listUsersWithFaceFeature() {
-        return userMapper.selectList(new LambdaQueryWrapper<User>()
-                .isNotNull(User::getFaceFeature)
-                .ne(User::getFaceFeature, "")
-                .orderByAsc(User::getId));
-    }
-
-    @Override
     public List<User> listUsers(ListUserQuery query) {
         return userMapper.selectList(buildListUserQueryWrapper(query));
     }

@@ -28,13 +28,6 @@ export default {
       minWidth: 320,
     },
     {
-      prop: 'allowFaceSelfRegister',
-      label: '允许人脸自注册',
-      genre: '$tag',
-      dictKey: 'faceSelfRegisterList',
-      minWidth: 140,
-    },
-    {
       prop: 'remark',
       label: '备注',
       minWidth: 200,

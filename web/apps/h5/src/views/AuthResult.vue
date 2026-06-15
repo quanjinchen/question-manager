@@ -50,11 +50,6 @@ let closeTimer = 0;
 let countdownTimer = 0;
 const countdown = ref(3);
 
-const resultMode = computed(() => {
-  const mode = route.query.mode;
-  return Array.isArray(mode) ? mode[0] : mode;
-});
-
 const resultStatus = computed(() => {
   const status = route.query.status;
   const value = Array.isArray(status) ? status[0] : status;
@@ -62,14 +57,9 @@ const resultStatus = computed(() => {
 });
 
 const isFail = computed(() => resultStatus.value === 'fail');
-const titleText = computed(() => {
-  if (isFail.value) {
-    return resultMode.value === 'register' ? '注册失败' : '认证失败';
-  }
-  return resultMode.value === 'register' ? '注册成功' : '认证成功';
-});
+const titleText = computed(() => (isFail.value ? '认证失败' : '认证成功'));
 const descriptionText = computed(() => (
-  isFail.value ? '人脸认证未通过，请重新认证' : `页面将在 ${countdown.value} 秒后自动关闭`
+  isFail.value ? '身份认证未通过，请重新认证' : `页面将在 ${countdown.value} 秒后自动关闭`
 ));
 
 function getCertToken() {
@@ -80,10 +70,9 @@ function getCertToken() {
 async function retryAuth() {
   const account = getCurrentAuthAccount(getCertToken());
   await router.replace({
-    path: '/face-auth',
+    path: '/login',
     query: {
-      certToken: account?.certToken || getCertToken(),
-      mode: 'auth'
+      certToken: account?.certToken || getCertToken()
     }
   });
 }

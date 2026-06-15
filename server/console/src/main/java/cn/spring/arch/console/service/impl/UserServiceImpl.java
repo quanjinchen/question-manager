@@ -13,10 +13,6 @@ import cn.spring.arch.console.pojo.req.ResetUserPasswordReqParam;
 import cn.spring.arch.console.pojo.req.UpdateUserReqParam;
 import cn.spring.arch.console.pojo.resp.UserDTO;
 import cn.spring.arch.console.service.UserService;
-import cn.spring.arch.framework.face.FaceFeatureEngine;
-import cn.spring.arch.file.constant.FileCategoryConstants;
-import cn.spring.arch.file.entity.FileRecord;
-import cn.spring.arch.file.manager.FileManager;
 import cn.spring.arch.system.entity.User;
 import cn.spring.arch.system.manager.OrgUserManager;
 import cn.spring.arch.system.manager.SysRoleUserManager;
@@ -46,10 +42,6 @@ public class UserServiceImpl implements UserService {
     private SysRoleUserManager sysRoleUserManager;
     @Resource
     private OrgUserManager orgUserManager;
-    @Resource
-    private FileManager fileManager;
-    @Resource
-    private FaceFeatureEngine faceFeatureEngine;
 
     @Override
     public RespInfo<Void> createUser(CreateUserReqParam createUserReqParam) {
@@ -77,14 +69,6 @@ public class UserServiceImpl implements UserService {
         user.setEmail(createUserReqParam.getEmail());
         user.setPhone(StringUtils.hasText(createUserReqParam.getPhone()) ? new EncryptField(createUserReqParam.getPhone()) : null);
         user.setIdCard(StringUtils.hasText(createUserReqParam.getIdCard()) ? new EncryptField(createUserReqParam.getIdCard()) : null);
-        if (StringUtils.hasText(createUserReqParam.getFaceBase64())) {
-            FileRecord fileRecord = fileManager.upload(null, createUserReqParam.getFaceBase64(), FileCategoryConstants.FACE_IMAGE);
-            user.setFaceFileId(fileRecord.getFileId());
-            user.setFaceFeature(faceFeatureEngine.extractFeatureBase64(createUserReqParam.getFaceBase64()));
-        } else {
-            user.setFaceFileId(StringUtils.hasText(createUserReqParam.getFaceFileId()) ? createUserReqParam.getFaceFileId() : null);
-            user.setFaceFeature(null);
-        }
         user.setStatus(createUserReqParam.getStatus() == null ? 1 : createUserReqParam.getStatus());
 
         String password = createUserReqParam.getPassword();
@@ -155,17 +139,6 @@ public class UserServiceImpl implements UserService {
         updateUser.setEmail(email);
         updateUser.setPhone(updateUserReqParam.getPhone() != null ? new EncryptField(updateUserReqParam.getPhone()) : existedUser.getPhone());
         updateUser.setIdCard(updateUserReqParam.getIdCard() != null ? new EncryptField(updateUserReqParam.getIdCard()) : existedUser.getIdCard());
-        if (StringUtils.hasText(updateUserReqParam.getFaceBase64())) {
-            FileRecord fileRecord = fileManager.upload(null, updateUserReqParam.getFaceBase64(), FileCategoryConstants.FACE_IMAGE);
-            updateUser.setFaceFileId(fileRecord.getFileId());
-            updateUser.setFaceFeature(faceFeatureEngine.extractFeatureBase64(updateUserReqParam.getFaceBase64()));
-        } else if (updateUserReqParam.getFaceFileId() != null) {
-            updateUser.setFaceFileId(StringUtils.hasText(updateUserReqParam.getFaceFileId()) ? updateUserReqParam.getFaceFileId() : null);
-            updateUser.setFaceFeature(StringUtils.hasText(updateUserReqParam.getFaceFileId()) ? existedUser.getFaceFeature() : null);
-        } else {
-            updateUser.setFaceFileId(existedUser.getFaceFileId());
-            updateUser.setFaceFeature(existedUser.getFaceFeature());
-        }
         updateUser.setStatus(updateUserReqParam.getStatus() != null ? updateUserReqParam.getStatus() : existedUser.getStatus());
         updateUser.setPassword(existedUser.getPassword());
         userManager.save(updateUser);

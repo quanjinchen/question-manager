@@ -28,14 +28,6 @@ const router = createRouter({
       component: () => import('@/views/AuthConfirm.vue')
     },
     {
-      path: '/face-auth',
-      name: 'faceAuth',
-      meta: {
-        title: '人脸认证'
-      },
-      component: () => import('@/views/FaceAuth.vue')
-    },
-    {
       path: '/auth-result',
       name: 'authResult',
       meta: {

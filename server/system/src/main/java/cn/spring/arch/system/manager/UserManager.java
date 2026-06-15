@@ -26,8 +26,6 @@ public interface UserManager {
 
     List<User> listByIds(Collection<Long> userIds);
 
-    List<User> listUsersWithFaceFeature();
-
     List<User> listUsers(ListUserQuery query);
 
     Page<User> page(PageReqParam reqParam, ListUserQuery query);

@@ -55,13 +55,6 @@
             <version>2.10.1</version>
         </dependency>
         <dependency>
-            <groupId>com.seeta.sdk</groupId>
-            <artifactId>seeta-sdk-platform</artifactId>
-            <version>1.2.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/seeta-sdk-platform-1.2.1.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
         </dependency>
@@ -84,9 +77,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring.boot.version}</version>
-                <configuration>
-                    <includeSystemScope>true</includeSystemScope>
-                </configuration>
                 <executions>
                     <execution>
                         <goals>

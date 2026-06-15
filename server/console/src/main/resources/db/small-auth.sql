@@ -38,28 +38,6 @@ CREATE TABLE `tb_app` (
 /*Data for the table `tb_app` */
 
 
-DROP TABLE IF EXISTS `tb_face_auth_log`;
-
-CREATE TABLE `tb_face_auth_log` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `auth_api_type` tinyint NOT NULL DEFAULT '1' COMMENT '认证接口类型，1 表示 1:1，2 表示 1:N',
-  `ip` varchar(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '请求 IP',
-  `app_id` bigint DEFAULT NULL COMMENT '应用 ID',
-  `app_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '应用名称',
-  `auth_full_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '认证人员姓名',
-  `auth_user_id` bigint DEFAULT NULL COMMENT '认证人员 ID',
-  `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态，0 失败 1 成功',
-  `errmsg` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '失败原因',
-  `create_by` bigint DEFAULT NULL,
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_by` bigint DEFAULT NULL,
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `deleted` tinyint NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='人脸认证日志表';
-
-
-
 /*Table structure for table `tb_file_record` */
 
 DROP TABLE IF EXISTS `tb_file_record`;
@@ -211,7 +189,6 @@ insert  into `tb_sys_menu`(`id`,`parent_id`,`menu_name`,`path`,`menu_type`,`menu
 (120,0,'应用管理','/application','MENU','system:app:query',3,0,1,'2026-05-12 17:34:00',1,'2026-05-12 19:09:22',0,'Grid'),
 (121,120,'应用保存','/application/save','BTN','system:app:update',10,0,1,'2026-05-12 19:09:22',1,'2026-05-12 19:09:22',0,''),
 (122,120,'应用删除','/application/delete','BTN','system:app:delete',20,0,1,'2026-05-12 19:09:22',1,'2026-05-12 19:09:22',0,''),
-(123,124,'认证日志','/system/face-auth-log','MENU','system:operationLog:query',1,1,1,'2026-05-13 16:53:42',1,'2026-05-13 16:53:42',0,''),
 (124,0,'日志管理','/log','DIR','log',4,1,1,'2026-05-13 17:49:40',1,'2026-05-13 17:49:40',0,'Document');
 
 /*Table structure for table `tb_sys_role` */
@@ -434,8 +411,6 @@ CREATE TABLE `tb_user` (
   `email` varchar(128) DEFAULT NULL COMMENT '邮箱',
   `phone` varchar(32) DEFAULT NULL COMMENT '手机号',
   `id_card` varchar(128) DEFAULT NULL COMMENT '身份证号',
-  `face_file_id` varchar(100) DEFAULT NULL COMMENT '人脸文件 ID',
-  `face_feature` text COMMENT '人脸特征值',
   `org_id` bigint DEFAULT NULL COMMENT '所属组织 ID',
   `password` varchar(255) DEFAULT NULL COMMENT '密码密文',
   `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态，1 启用，0 禁用',
@@ -453,8 +428,8 @@ CREATE TABLE `tb_user` (
 
 /*Data for the table `tb_user` */
 
-insert  into `tb_user`(`id`,`username`,`full_name`,`email`,`phone`,`id_card`,`face_file_id`,`face_feature`,`org_id`,`password`,`status`,`create_by`,`create_time`,`update_by`,`update_time`,`deleted`) values 
-(1,'admin','超级管理员','admin@local.test','Mg+bprE7ppiO85EAHpPqrw==',NULL,NULL,NULL,1,'$2a$10$5jEE.2xAuijvcRpFVjhXt.ZODYlK/bsYzAxn6EPnmh0tOw0B5ArjG',0,1,'2026-04-16 14:50:35',1,'2026-05-12 19:15:25',0);
+insert  into `tb_user`(`id`,`username`,`full_name`,`email`,`phone`,`id_card`,`org_id`,`password`,`status`,`create_by`,`create_time`,`update_by`,`update_time`,`deleted`) values 
+(1,'admin','超级管理员','admin@local.test','Mg+bprE7ppiO85EAHpPqrw==',NULL,1,'$2a$10$5jEE.2xAuijvcRpFVjhXt.ZODYlK/bsYzAxn6EPnmh0tOw0B5ArjG',0,1,'2026-04-16 14:50:35',1,'2026-05-12 19:15:25',0);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

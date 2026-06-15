@@ -3,10 +3,8 @@ package cn.spring.arch.console.service.impl;
 import cn.spring.arch.common.pojo.RespInfo;
 import cn.spring.arch.console.pojo.resp.DashboardSummaryDTO;
 import cn.spring.arch.console.service.DashboardService;
-import cn.spring.arch.system.entity.FaceAuthLog;
 import cn.spring.arch.system.entity.OperationLog;
 import cn.spring.arch.system.entity.User;
-import cn.spring.arch.system.manager.FaceAuthLogManager;
 import cn.spring.arch.system.manager.OperationLogManager;
 import cn.spring.arch.system.manager.UserManager;
 import org.springframework.stereotype.Service;
@@ -34,17 +32,14 @@ public class DashboardServiceImpl implements DashboardService {
     private UserManager userManager;
     @Resource
     private OperationLogManager operationLogManager;
-    @Resource
-    private FaceAuthLogManager faceAuthLogManager;
 
     @Override
     public RespInfo<DashboardSummaryDTO> summary() {
         List<User> users = userManager.listUsers(null);
         List<OperationLog> operationLogs = operationLogManager.listOperationLogs();
-        List<FaceAuthLog> faceAuthLogs = faceAuthLogManager.listFaceAuthLogs(null);
 
         DashboardSummaryDTO summaryDTO = new DashboardSummaryDTO();
-        summaryDTO.setCards(buildCards(users, faceAuthLogs));
+        summaryDTO.setCards(buildCards(users, operationLogs));
 
         DashboardSummaryDTO.DashboardUserSeriesDTO userSeries = new DashboardSummaryDTO.DashboardUserSeriesDTO();
         userSeries.setWEEK(buildOperatorSeries(operationLogs, RangeType.WEEK));
@@ -64,7 +59,7 @@ public class DashboardServiceImpl implements DashboardService {
         summaryDTO.setRankList(rankSeries);
 
         DashboardSummaryDTO.DashboardPieSeriesDTO pieSeries = new DashboardSummaryDTO.DashboardPieSeriesDTO();
-        pieSeries.setSTATUS(buildStatusPieSummary(operationLogs, faceAuthLogs));
+        pieSeries.setSTATUS(buildStatusPieSummary(operationLogs));
         pieSeries.setMODULE(buildModulePieSummary(operationLogs));
         summaryDTO.setPieSummary(pieSeries);
         return RespInfo.success(summaryDTO);
@@ -72,26 +67,26 @@ public class DashboardServiceImpl implements DashboardService {
 
     private List<DashboardSummaryDTO.DashboardCardDTO> buildCards(
             List<User> users,
-            List<FaceAuthLog> faceAuthLogs
+            List<OperationLog> operationLogs
     ) {
         int enabledUserCount = 0;
         for (User user : users) {
-            if (user.getStatus() != null && user.getStatus().intValue() == 1) {
+            if (user.getStatus() != null && user.getStatus().intValue() == 0) {
                 enabledUserCount++;
             }
         }
 
         LocalDateTime lastWeekStart = LocalDate.now().minusDays(6).atStartOfDay();
-        int recentFaceAuthCount = 0;
-        for (FaceAuthLog faceAuthLog : faceAuthLogs) {
-            if (faceAuthLog.getCreateTime() != null && !faceAuthLog.getCreateTime().isBefore(lastWeekStart)) {
-                recentFaceAuthCount++;
+        int recentOperationCount = 0;
+        for (OperationLog operationLog : operationLogs) {
+            if (operationLog.getRequestTime() != null && !operationLog.getRequestTime().isBefore(lastWeekStart)) {
+                recentOperationCount++;
             }
         }
 
         List<DashboardSummaryDTO.DashboardCardDTO> cards = new ArrayList<DashboardSummaryDTO.DashboardCardDTO>();
         cards.add(buildCard(1, "用户总数", users.size(), "启用用户", enabledUserCount, "User"));
-        cards.add(buildCard(2, "认证日志数", faceAuthLogs.size(), "近7天认证", recentFaceAuthCount, "Histogram"));
+        cards.add(buildCard(2, "操作日志数", operationLogs.size(), "近7天操作", recentOperationCount, "Histogram"));
         return cards;
     }
 
@@ -179,22 +174,12 @@ public class DashboardServiceImpl implements DashboardService {
                 }, ArrayList::addAll);
     }
 
-    private List<DashboardSummaryDTO.DashboardPieItemDTO> buildStatusPieSummary(
-            List<OperationLog> operationLogs,
-            List<FaceAuthLog> faceAuthLogs
-    ) {
+    private List<DashboardSummaryDTO.DashboardPieItemDTO> buildStatusPieSummary(List<OperationLog> operationLogs) {
         int successCount = 0;
         int failedCount = 0;
 
         for (OperationLog log : operationLogs) {
             if (Boolean.TRUE.equals(log.getSuccessFlag())) {
-                successCount++;
-            } else {
-                failedCount++;
-            }
-        }
-        for (FaceAuthLog log : faceAuthLogs) {
-            if (log.getStatus() != null && log.getStatus().intValue() == 1) {
                 successCount++;
             } else {
                 failedCount++;

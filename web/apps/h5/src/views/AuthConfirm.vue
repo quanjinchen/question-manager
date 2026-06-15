@@ -5,7 +5,7 @@
         <van-icon name="shield-o" />
       </div>
       <h1>{{ appName }}</h1>
-      <p>正在请求使用当前身份信息完成人脸{{ actionText }}</p>
+      <p>正在请求使用当前身份信息完成认证</p>
     </section>
 
     <van-cell-group
@@ -81,29 +81,16 @@
 import { computed, onMounted, reactive, toRefs } from 'vue';
 import { showFailToast } from 'vant';
 import { useRoute, useRouter } from 'vue-router';
+import { $apis } from '@/apis/requests';
 import { getCurrentAuthAccount, type CachedAuthAccount } from '@/apis/auth-session';
 
 const router = useRouter();
 const route = useRoute();
-const FACE_MODEL_URLS = [
-  '/models/face-api/tiny_face_detector_model-weights_manifest.json',
-  '/models/face-api/tiny_face_detector_model-shard1',
-  '/models/face-api/face_landmark_68_tiny_model-weights_manifest.json',
-  '/models/face-api/face_landmark_68_tiny_model-shard1'
-];
 
 const certToken = computed(() => {
   const token = route.query.certToken;
   return Array.isArray(token) ? token[0] || '' : token || '';
 });
-
-function preloadFaceModels() {
-  FACE_MODEL_URLS.forEach(url => {
-    fetch(url, { cache: 'force-cache' }).catch(() => {
-      console.warn(`[face-api] 人脸模型预下载失败：${url}`);
-    });
-  });
-}
 
 const dataInfo = reactive({
   account: null as CachedAuthAccount | null,
@@ -126,23 +113,20 @@ const dataInfo = reactive({
     }
     return `${idCard.slice(0, 4)}**********${idCard.slice(-4)}`;
   },
-  get actionText() {
-    return this.account?.registerMode ? '注册' : '认证';
-  },
   get agreementTitle() {
     return this.agreementType === 'privacy' ? '隐私协议' : '用户协议';
   },
   get agreementContent() {
     if (this.agreementType === 'privacy') {
       return [
-        '为完成身份核验，本页面将采集姓名、身份证号及人脸图片，并提交给当前登录应用及认证服务处理。',
-        '人脸图片仅用于本次注册或认证比对，认证完成后按平台安全策略保存或清理。',
+        '为完成身份核验，本页面将采集姓名和身份证号，并提交给当前登录应用及认证服务处理。',
+        '身份信息仅用于本次认证流程，认证完成后按平台安全策略保存或清理。',
         '平台会采取必要的加密、访问控制和日志审计措施保护你的个人信息。'
       ];
     }
     return [
       '你确认当前操作由本人发起，并授权当前应用使用身份信息完成认证流程。',
-      '请确保填写的姓名和身份证号真实有效，认证过程中请保持本人正对屏幕。',
+      '请确保填写的姓名和身份证号真实有效。',
       '如果你不同意相关条款，可以返回并停止本次认证。'
     ];
   },
@@ -169,7 +153,7 @@ const dataInfo = reactive({
     this.agreementType = type;
     this.agreementVisible = true;
   },
-  confirm() {
+  async confirm() {
     if (!this.account) {
       showFailToast('未找到认证账户信息');
       return;
@@ -179,11 +163,16 @@ const dataInfo = reactive({
       return;
     }
 
+    await $apis.auth.registerAccount({
+      certToken: this.account.certToken,
+      fullName: this.account.fullName,
+      idCard: this.account.idCard
+    });
     router.replace({
-      path: '/face-auth',
+      path: '/auth-result',
       query: {
         certToken: this.account.certToken,
-        mode: this.account.registerMode ? 'register' : 'auth'
+        status: 'success'
       }
     });
   }
@@ -191,7 +180,6 @@ const dataInfo = reactive({
 
 onMounted(() => {
   dataInfo.init();
-  preloadFaceModels();
 });
 
 const {
@@ -201,7 +189,6 @@ const {
   clientId,
   userName,
   maskedIdCard,
-  actionText,
   agreementTitle,
   agreementContent
 } = toRefs(dataInfo);

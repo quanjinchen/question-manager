@@ -17,12 +17,6 @@ export default {
       minWidth: 180
     },
     {
-      prop: 'faceRegistered',
-      label: '是否已注册人脸',
-      genre: '$slot',
-      width: 150
-    },
-    {
       prop: 'phone',
       label: '手机号',
       minWidth: 160

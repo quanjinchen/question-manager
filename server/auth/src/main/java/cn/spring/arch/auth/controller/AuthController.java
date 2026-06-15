@@ -3,7 +3,6 @@ package cn.spring.arch.auth.controller;
 import cn.spring.arch.auth.pojo.req.AccountQueryReqParam;
 import cn.spring.arch.auth.pojo.req.AccountRegisterReqParam;
 import cn.spring.arch.auth.pojo.req.CheckCertTokenReqParam;
-import cn.spring.arch.auth.pojo.req.FaceCompareReqParam;
 import cn.spring.arch.auth.pojo.req.GetAuthResultReqParam;
 import cn.spring.arch.auth.pojo.req.GetCertTokenReqParam;
 import cn.spring.arch.auth.pojo.resp.AccountLoginDTO;
@@ -24,7 +23,7 @@ import javax.validation.Valid;
 
 @Tag(name = "认证平台")
 @RestController
-@RequestMapping("/face")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Resource
@@ -42,13 +41,6 @@ public class AuthController {
     @OperateLog(module = "认证平台", action = "账户注册")
     public RespInfo<AccountLoginDTO> registerAccount(@Valid @RequestBody AccountRegisterReqParam reqParam) {
         return authService.registerAccount(reqParam);
-    }
-
-    @Operation(summary = "人脸比对")
-    @PostMapping("/compare-face")
-    @OperateLog(module = "认证平台", action = "人脸比对")
-    public RespInfo<AuthResultDTO> compareFace(@Valid @RequestBody FaceCompareReqParam reqParam) {
-        return authService.compareFace(reqParam);
     }
 
     @Operation(summary = "获取 certToken")

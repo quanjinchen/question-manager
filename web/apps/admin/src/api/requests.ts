@@ -36,11 +36,6 @@ export const $apis = {
       return appRequest.post('/api/operation-log/list-operation-log', params);
     }
   },
-  faceAuthLogs: {
-    page(params: RequestParams = {}) {
-      return appRequest.post('/api/face-auth-log/list-face-auth-log', params);
-    }
-  },
   users: {
     list(params: RequestParams = {}) {
       return appRequest.post('/api/user/list-user', params);

@@ -16,6 +16,4 @@ public class AccountLoginDTO {
     @Schema(description = "用户信息")
     private CertUserDTO userInfo;
 
-    @Schema(description = "是否已注册人脸")
-    private Boolean faceRegistered;
 }

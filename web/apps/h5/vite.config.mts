@@ -11,10 +11,6 @@ function manualChunks(id: string) {
     return 'vant';
   }
 
-  if (id.includes('node_modules/face-api.js') || id.includes('node_modules/@tensorflow')) {
-    return 'face-api';
-  }
-
   if (id.includes('node_modules/vue-router')) {
     return 'app-core';
   }

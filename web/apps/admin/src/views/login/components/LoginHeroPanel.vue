@@ -1,6 +1,6 @@
 <template>
   <div class="LoginHeroPanel-root">
-    <div class="face-recognition-animation">
+    <div class="security-auth-animation">
       <svg
         class="hexagon-grid"
         viewBox="0 0 100 100"
@@ -28,7 +28,7 @@
       </svg>
 
       <svg
-        class="face-mesh"
+        class="security-mesh"
         viewBox="0 0 200 240"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -54,7 +54,7 @@
           <path d="M 150 70 Q 155 120 145 180" class="mesh-line" />
         </g>
 
-        <g class="feature-points">
+        <g class="signal-points">
           <circle cx="75" cy="100" r="3" fill="#3b82f6" class="point" />
           <circle cx="125" cy="100" r="3" fill="#3b82f6" class="point" />
           <circle cx="100" cy="120" r="3" fill="#3b82f6" class="point" />
@@ -100,7 +100,7 @@
 
     <div class="LoginHeroPanel-content">
       <h1 class="brand-title">{{ adminStore.title }}</h1>
-      <p class="brand-subtitle">人脸识别 · 安全认证</p>
+      <p class="brand-subtitle">身份核验 · 安全认证</p>
     </div>
   </div>
 </template>
@@ -204,7 +204,7 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-.face-recognition-animation {
+.security-auth-animation {
   position: relative;
   width: 100%;
   height: 100%;
@@ -229,7 +229,7 @@ onUnmounted(() => {
   z-index: 1;
 }
 
-.face-mesh {
+.security-mesh {
   position: absolute;
   top: 50%;
   left: 50%;

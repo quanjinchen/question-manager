@@ -21,12 +21,5 @@ export const exampleRequests = {
         alertError: false,
         ...options
       })
-  },
-  faceAuthLogs: {
-    pageSilently: (params: Record<string, any> = {}, options: AppRequestMethodOptions = {}) =>
-      appRequest.post('/api/face-auth-log/list-face-auth-log', params, {
-        alertError: false,
-        ...options
-      })
   }
 };

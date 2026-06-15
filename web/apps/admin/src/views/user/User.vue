@@ -60,15 +60,7 @@
         :page-info="pageInfo"
         :loading="loading"
         @handle-click="dataInfo.handleAction"
-      >
-        <template #faceRegistered="{ row }">
-          <el-tag
-            :type="dataInfo.hasFaceFeature(row) ? 'success' : 'info'"
-          >
-            {{ dataInfo.hasFaceFeature(row) ? '已注册' : '未注册' }}
-          </el-tag>
-        </template>
-      </AppTable>
+      />
 
       <AppPager
         v-model:page-index="pageInfo.pageNum"
@@ -208,16 +200,6 @@ const dataInfo: any = reactive({
 
     const handler = actionMap[action.key];
     await handler?.();
-  },
-
-  hasFaceFeature(row: UserRecord) {
-    // 兼容不同接口版本的人脸特征字段，任一字段有值即视为已注册人脸。
-    return Boolean(
-      row.faceFeature
-        || row.faceFeatureValue
-        || row.faceFeatureId
-        || row.faceFileId,
-    );
   },
 
   // 初始化

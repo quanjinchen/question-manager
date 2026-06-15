@@ -5,10 +5,6 @@ export type UserRecord = {
   phone: string;
   idCard?: string;
   email: string;
-  faceFileId?: string;
-  faceFeature?: string;
-  faceFeatureValue?: string;
-  faceFeatureId?: string;
   status: number | string;
   remark?: string;
 };
@@ -19,23 +15,9 @@ export type AppRecord = {
   appCode: string;
   clientId: string;
   clientSecret: string;
-  allowFaceSelfRegister?: boolean;
   remark?: string;
   createTime?: string;
   updateTime?: string;
-};
-
-export type FaceAuthLogRecord = {
-  id: string | number;
-  authApiType?: number | string;
-  ip?: string;
-  appId?: string | number | null;
-  appName?: string;
-  authFullName?: string;
-  authUserId?: string | number | null;
-  status?: number | string;
-  errmsg?: string;
-  createTime?: string;
 };
 
 export type OrganizationRecord = {

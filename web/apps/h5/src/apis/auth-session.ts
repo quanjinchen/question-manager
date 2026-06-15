@@ -16,13 +16,10 @@ export type CachedAuthAccount = {
   fullName: string;
   idCard: string;
   token?: string;
-  faceRegistered?: boolean;
   appInfo?: {
     appName?: string;
     clientId?: string;
-    allowFaceSelfRegister?: boolean;
   } | null;
-  registerMode?: boolean;
 };
 
 const AUTH_IDENTITY_STORAGE_KEY = 'small-auth:h5:identity';

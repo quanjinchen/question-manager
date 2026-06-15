@@ -12,36 +12,6 @@
       label-position="top"
     >
       <el-row :gutter="16">
-        <el-col :span="24">
-          <el-form-item label="人脸图片">
-            <div class="face-upload">
-              <div v-if="dataInfo.facePreviewUrl" class="face-preview">
-                <AppImage
-                  :src="dataInfo.facePreviewUrl"
-                  :image-props="{ previewSrcList: [dataInfo.facePreviewUrl] }"
-                />
-              </div>
-              <div class="face-actions">
-                <input
-                  ref="fileInputRef"
-                  type="file"
-                  accept="image/*"
-                  class="face-file-input"
-                  @change="dataInfo.handleFaceFileChange"
-                />
-                <AppButton @click="dataInfo.openFaceFilePicker()">选择图片</AppButton>
-                <AppButton
-                  v-if="dataInfo.facePreviewUrl || formData.faceFileId"
-                  :button-props="{ type: 'danger', plain: true }"
-                  @click="dataInfo.clearFaceFile()"
-                >
-                  清除图片
-                </AppButton>
-              </div>
-            </div>
-          </el-form-item>
-        </el-col>
-
         <el-col :span="12">
           <el-form-item label="用户名" prop="username">
             <AppInput
@@ -132,7 +102,7 @@
 </template>
 
 <script setup lang="ts" name="UserFormDialog">
-import { computed, onBeforeUnmount, reactive, ref, toRefs, watch } from "vue";
+import { computed, reactive, ref, toRefs, watch } from "vue";
 import $utils from '@vue-scaffold/utils';
 import { useVModel } from '@vue-scaffold/hooks';
 import type { FormInstance, FormRules } from "element-plus";
@@ -154,17 +124,7 @@ const emit = defineEmits<{
 }>();
 
 const formRef = ref<FormInstance>();
-const fileInputRef = ref<HTMLInputElement>();
 const visible = useVModel(props, emit as any);
-
-function fileToDataUrl(file: File) {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result ?? ""));
-    reader.onerror = () => reject(new Error("read file failed"));
-    reader.readAsDataURL(file);
-  });
-}
 
 const dataInfo: any = reactive({
   formData: {
@@ -174,7 +134,6 @@ const dataInfo: any = reactive({
     phone: "",
     email: "",
     idCard: "",
-    faceFileId: "",
     status: 0,
     remark: "",
   },
@@ -218,22 +177,12 @@ const dataInfo: any = reactive({
   } as FormRules,
   submitLoading: false,
   loading: false,
-  facePreviewUrl: "",
-  faceFile: null as File | null,
-  faceChanged: false,
   get isEdit() {
     return Boolean(props.selectItem?.id);
   },
   initForm() {
     formRef.value?.resetFields();
     formRef.value?.clearValidate();
-    this.revokeFacePreviewUrl();
-    this.facePreviewUrl = "";
-    this.faceFile = null;
-    this.faceChanged = false;
-    if (fileInputRef.value) {
-      fileInputRef.value.value = "";
-    }
   },
   generatePassword() {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*";
@@ -243,36 +192,6 @@ const dataInfo: any = reactive({
     }
     this.formData.password = password;
     formRef.value?.validateField?.("password");
-  },
-  revokeFacePreviewUrl() {
-    if (this.facePreviewUrl?.startsWith?.("blob:")) {
-      URL.revokeObjectURL(this.facePreviewUrl);
-    }
-  },
-  openFaceFilePicker() {
-    fileInputRef.value?.click();
-  },
-  handleFaceFileChange(event: Event) {
-    const target = event.target as HTMLInputElement;
-    const file = target.files?.[0];
-    if (!file) {
-      return;
-    }
-    this.revokeFacePreviewUrl();
-    this.faceFile = file;
-    this.faceChanged = true;
-    this.formData.faceFileId = "";
-    this.facePreviewUrl = URL.createObjectURL(file);
-  },
-  clearFaceFile() {
-    this.revokeFacePreviewUrl();
-    this.faceFile = null;
-    this.faceChanged = true;
-    this.facePreviewUrl = "";
-    this.formData.faceFileId = "";
-    if (fileInputRef.value) {
-      fileInputRef.value.value = "";
-    }
   },
   async getDetail() {
     if (!props.selectItem?.id) {
@@ -291,26 +210,10 @@ const dataInfo: any = reactive({
         phone: "",
         email: "",
         idCard: "",
-        faceFileId: "",
         status: 0,
         remark: "",
         ...detail,
       };
-      this.faceFile = null;
-      this.faceChanged = false;
-      this.revokeFacePreviewUrl();
-      this.facePreviewUrl = "";
-      if (detail?.faceFileId) {
-        try {
-          const fileBlob = await $apis.files.download(detail.faceFileId, {
-            alertError: false,
-          });
-          const blobData = fileBlob?.data instanceof Blob ? fileBlob.data : null;
-          this.facePreviewUrl = blobData ? URL.createObjectURL(blobData) : "";
-        } catch {
-          this.facePreviewUrl = "";
-        }
-      }
     } finally {
       this.loading = false;
     }
@@ -320,11 +223,6 @@ const dataInfo: any = reactive({
     if (dataInfo.isEdit) {
       delete paramsRes.password;
     }
-    if (!dataInfo.faceChanged) {
-      delete paramsRes.faceFileId;
-    } else {
-      paramsRes.faceFileId = dataInfo.formData.faceFileId || null;
-    }
     return paramsRes;
   },
   async handleSubmit() {
@@ -333,13 +231,6 @@ const dataInfo: any = reactive({
     this.submitLoading = true;
     try {
       const params = this.params;
-      if (this.faceChanged && this.faceFile) {
-        params.faceBase64 = await fileToDataUrl(this.faceFile);
-      } else if (this.faceChanged && !this.faceFile) {
-        params.faceBase64 = "";
-        params.faceFeature = "";
-        await $utils.Message.messageConfirm('清空图片，会导致人脸特征值也清空，导致无法人脸认证，确认？')
-      }
       await $apis.users[this.isEdit ? "update" : "create"]({
         ...params,
       });
@@ -376,36 +267,10 @@ watch(visible, (value) => {
 
 const { submitLoading, loading, formData } = toRefs(dataInfo);
 
-onBeforeUnmount(() => {
-  dataInfo.revokeFacePreviewUrl();
-});
-
 defineExpose({ dataInfo });
 </script>
 
 <style scoped lang="scss">
-.face-upload {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-.face-preview {
-  width: 120px;
-  height: 120px;
-  overflow: hidden;
-  border: 1px solid #dcdfe6;
-  border-radius: 8px;
-  background: #f5f7fa;
-  flex-shrink: 0;
-}
-
-.face-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
 .password-row {
   display: flex;
   align-items: center;
@@ -421,7 +286,4 @@ defineExpose({ dataInfo });
   width: 100%;
 }
 
-.face-file-input {
-  display: none;
-}
 </style>

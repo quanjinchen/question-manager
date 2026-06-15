@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref, toRefs } from 'vue';
-import { showDialog, showFailToast } from 'vant';
+import { showFailToast } from 'vant';
 import { useRoute, useRouter } from 'vue-router';
 import { $apis } from '@/apis/requests';
 import AppStateResult from '@/components/AppStateResult.vue';
@@ -115,7 +115,7 @@ const dataInfo = reactive({
   loading: false,
   idCardKeyboardVisible: false,
   get panelDescription() {
-    return '请输入姓名和身份证号，继续完成人脸认证';
+    return '请输入姓名和身份证号，继续完成身份认证';
   },
   get params() {
     return {
@@ -131,16 +131,6 @@ const dataInfo = reactive({
         fullName: account.fullName,
         idCard: account.idCard
       });
-      const faceRegistered = Boolean(accountInfo?.faceRegistered);
-      const allowFaceSelfRegister = accountInfo?.appInfo?.allowFaceSelfRegister === true;
-      if (!faceRegistered && !allowFaceSelfRegister) {
-        await showDialog({
-          title: '未注册人脸',
-          message: '当前账号未注册人脸，请联系管理员完成注册后再认证。',
-          confirmButtonText: '我知道了'
-        });
-        return false;
-      }
       setCachedAuthIdentity({
         fullName: account.fullName,
         idCard: account.idCard
@@ -148,9 +138,7 @@ const dataInfo = reactive({
       setCurrentAuthAccount({
         ...account,
         token: accountInfo?.token || account.token || '',
-        faceRegistered,
-        appInfo: accountInfo?.appInfo ?? account.appInfo ?? null,
-        registerMode: !faceRegistered
+        appInfo: accountInfo?.appInfo ?? account.appInfo ?? null
       });
       await router.replace({
         path: '/auth-confirm',
