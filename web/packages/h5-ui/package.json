@@ -1,0 +1,19 @@
+{
+  "name": "@vue-scaffold/h5-ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@vue-scaffold/hooks": "workspace:*",
+    "@vue-scaffold/utils": "workspace:*",
+    "vant": "^4.9.21",
+    "vue": "^3.5.13"
+  },
+  "scripts": {
+    "typecheck": "node --max-old-space-size=4096 ../../scripts/vue-tsc.mjs --noEmit -p tsconfig.json",
+    "lint": "eslint src --ext .ts,.vue"
+  }
+}

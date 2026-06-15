@@ -1,0 +1,13 @@
+{
+  "name": "@vue-scaffold/constants",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "node --max-old-space-size=4096 ../../scripts/vue-tsc.mjs --noEmit -p tsconfig.json",
+    "lint": "eslint src --ext .ts,.vue"
+  }
+}

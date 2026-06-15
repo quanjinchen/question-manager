@@ -1,0 +1,85 @@
+package cn.spring.arch.system.manager.impl;
+
+import cn.spring.arch.system.entity.SysRoleUser;
+import cn.spring.arch.system.manager.SysRoleUserManager;
+import cn.spring.arch.system.mapper.SysRoleUserMapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.List;
+
+@Component
+public class SysRoleUserManagerImpl implements SysRoleUserManager {
+
+    @Resource
+    private SysRoleUserMapper sysRoleUserMapper;
+
+    @Override
+    public List<SysRoleUser> listByUserId(Long userId) {
+        List<SysRoleUser> roleUsers = sysRoleUserMapper.selectList(
+                new LambdaQueryWrapper<SysRoleUser>().eq(SysRoleUser::getUserId, userId)
+        );
+        return roleUsers == null ? Collections.emptyList() : roleUsers;
+    }
+
+    @Override
+    public List<SysRoleUser> listByRoleId(Long roleId) {
+        List<SysRoleUser> roleUsers = sysRoleUserMapper.selectList(
+                new LambdaQueryWrapper<SysRoleUser>().eq(SysRoleUser::getRoleId, roleId)
+        );
+        return roleUsers == null ? Collections.emptyList() : roleUsers;
+    }
+
+    @Override
+    public boolean existsByRoleId(Long roleId) {
+        if (roleId == null) {
+            return false;
+        }
+        Long count = sysRoleUserMapper.selectCount(new LambdaQueryWrapper<SysRoleUser>().eq(SysRoleUser::getRoleId, roleId));
+        return count != null && count > 0;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void replaceUserRoles(Long userId, List<Long> roleIds) {
+        deleteByUserId(userId);
+        if (roleIds == null || roleIds.isEmpty()) {
+            return;
+        }
+        for (Long roleId : roleIds) {
+            SysRoleUser roleUser = new SysRoleUser();
+            roleUser.setUserId(userId);
+            roleUser.setRoleId(roleId);
+            sysRoleUserMapper.insert(roleUser);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void replaceRoleUsers(Long roleId, List<Long> userIds) {
+        deleteByRoleId(roleId);
+        if (userIds == null || userIds.isEmpty()) {
+            return;
+        }
+        for (Long userId : userIds) {
+            SysRoleUser roleUser = new SysRoleUser();
+            roleUser.setRoleId(roleId);
+            roleUser.setUserId(userId);
+            sysRoleUserMapper.insert(roleUser);
+        }
+    }
+
+    @Override
+    public void deleteByUserId(Long userId) {
+        sysRoleUserMapper.delete(new LambdaQueryWrapper<SysRoleUser>().eq(SysRoleUser::getUserId, userId));
+    }
+
+    @Override
+    public void deleteByRoleId(Long roleId) {
+        sysRoleUserMapper.delete(new LambdaQueryWrapper<SysRoleUser>().eq(SysRoleUser::getRoleId, roleId));
+    }
+}
+

@@ -1,0 +1,7 @@
+target/
+.idea/
+*.iml
+.flattened-pom.xml
+logs/
+data/
+seetaface6/

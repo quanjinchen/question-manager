@@ -1,0 +1,14 @@
+{
+  // utils 包自己的 TS 配置，作为可复用子项目被 apps/admin 引用。
+  "extends": "../config/tsconfig.base.json",
+  "compilerOptions": {
+    // 开启 composite，允许别的项目通过 references 依赖当前包。
+    "composite": true,
+    // 生成声明文件，方便其它项目消费 utils 时拿到稳定类型信息。
+    "declaration": true,
+    "tsBuildInfoFile": "../../node_modules/.cache/tsbuildinfo/utils.tsbuildinfo",
+    "baseUrl": "."
+  },
+  // utils 只收录自己的源码，不引入应用层文件。
+  "include": ["src/**/*.ts", "src/**/*.d.ts"]
+}

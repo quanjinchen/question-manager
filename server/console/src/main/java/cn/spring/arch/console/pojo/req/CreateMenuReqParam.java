@@ -1,0 +1,42 @@
+package cn.spring.arch.console.pojo.req;
+
+import cn.spring.arch.common.annotation.MenuType;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+@Data
+@Schema(description = "创建菜单请求")
+public class CreateMenuReqParam {
+
+    @Schema(description = "父菜单 ID", required = true, example = "0")
+    @NotNull(message = "父菜单 ID 不能为空")
+    private Long parentId;
+
+    @Schema(description = "菜单名称", required = true, example = "用户管理")
+    @NotBlank(message = "菜单名称不能为空")
+    private String menuName;
+
+    @Schema(description = "菜单路径", example = "/system/user")
+    private String path;
+
+    @Schema(description = "菜单图标", example = "User")
+    private String icon;
+
+    @Schema(description = "菜单类型，DIR 目录，MENU 菜单，PAGE 页面，BTN 按钮", required = true, example = "MENU")
+    @NotBlank(message = "菜单类型不能为空")
+    @MenuType(allowBlank = false)
+    private String menuType;
+
+    @Schema(description = "权限编码", example = "system:user:query")
+    private String menuCode;
+
+    @Schema(description = "排序值", example = "10")
+    private Integer orderNum;
+
+    @Schema(description = "是否可见", example = "true")
+    private Boolean visible;
+}
+

@@ -1,0 +1,9 @@
+{
+  "name": "@vue-scaffold/styles",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "element-plus": "^2.10.6"
+  }
+}

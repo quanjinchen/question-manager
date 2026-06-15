@@ -1,0 +1,13 @@
+{
+  "extends": "../config/tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "tsBuildInfoFile": "../../node_modules/.cache/tsbuildinfo/api.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "@vue-scaffold/utils": ["../utils/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue", "../utils/src/**/*.ts"]
+}

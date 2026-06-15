@@ -1,0 +1,25 @@
+{
+  // monorepo 里所有应用和包共享的基础 TS 规则，尽量只放通用编译选项。
+  "compilerOptions": {
+    // 面向现代浏览器和构建工具输出语法。
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    // 交给 Vite 的 bundler 语义解析模块，和前端工程保持一致。
+    "moduleResolution": "Bundler",
+    // 保持严格类型检查，避免脚手架演化过程中悄悄失去类型约束。
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    // 每个文件都能独立被转换，和 Vite/esbuild 的工作方式一致。
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    // 第三方依赖声明不做深度检查，减少无关类型噪音。
+    "skipLibCheck": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    // 补充 node 类型，便于识别 vite.config 等工程文件里的 Node API。
+    "types": ["node"]
+  }
+}

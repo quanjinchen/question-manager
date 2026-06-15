@@ -1,0 +1,33 @@
+package cn.spring.arch.file.entity;
+
+import cn.spring.arch.common.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class FileRecord extends BaseEntity {
+
+    @TableField("file_id")
+    private String fileId;
+
+    @TableField("file_name")
+    private String fileName;
+
+    @TableField("file_category")
+    private String fileCategory;
+
+    @TableField("file_suffix")
+    private String fileSuffix;
+
+    @TableField("file_size")
+    private Long fileSize;
+
+    @TableField("content_type")
+    private String contentType;
+
+    @TableField("object_name")
+    private String objectName;
+}
+

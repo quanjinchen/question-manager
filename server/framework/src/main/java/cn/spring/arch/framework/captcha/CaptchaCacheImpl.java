@@ -1,0 +1,31 @@
+package cn.spring.arch.framework.captcha;
+
+import cn.spring.arch.framework.redis.manager.RedisManager;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+
+@Component
+public class CaptchaCacheImpl implements CaptchaCache {
+
+    private static final String CAPTCHA_CACHE_PREFIX = "captcha:";
+
+    @Resource
+    private RedisManager redisManager;
+
+    @Override
+    public void put(String uuid, String code, int expireSeconds) {
+        redisManager.set(CAPTCHA_CACHE_PREFIX + uuid, code, expireSeconds);
+    }
+
+    @Override
+    public String get(String uuid) {
+        return redisManager.get(CAPTCHA_CACHE_PREFIX + uuid, String.class);
+    }
+
+    @Override
+    public void remove(String uuid) {
+        redisManager.delete(CAPTCHA_CACHE_PREFIX + uuid);
+    }
+}
+

@@ -1,0 +1,20 @@
+{
+  "extends": "../config/tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "tsBuildInfoFile": "../../node_modules/.cache/tsbuildinfo/h5-ui.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "@vue-scaffold/hooks": ["../hooks/src/index.ts"],
+      "@vue-scaffold/utils": ["../utils/src/index.ts"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "../hooks/src/**/*.ts",
+    "../utils/src/**/*.ts"
+  ]
+}

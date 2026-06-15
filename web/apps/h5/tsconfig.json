@@ -1,0 +1,30 @@
+{
+  "extends": "../../packages/config/tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "../../node_modules/.cache/tsbuildinfo/h5.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@vue-scaffold/api": ["../../packages/api/src/index.ts"],
+      "@vue-scaffold/constants": ["../../packages/constants/src/index.ts"],
+      "@vue-scaffold/h5-ui": ["../../packages/h5-ui/src/index.ts"],
+      "@vue-scaffold/utils": ["../../packages/utils/src/index.ts"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "env.d.ts",
+    "../../packages/constants/src/**/*.ts",
+    "../../packages/constants/src/**/*.d.ts",
+    "../../packages/h5-ui/src/**/*.ts",
+    "../../packages/h5-ui/src/**/*.d.ts",
+    "../../packages/h5-ui/src/**/*.vue",
+    "../../packages/api/src/**/*.ts",
+    "../../packages/api/src/**/*.d.ts",
+    "../../packages/utils/src/**/*.ts",
+    "../../packages/utils/src/**/*.d.ts"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep -l \"menu.*type\\\\|MenuType\")",
+      "Bash(xargs grep -l \"MenuType\\\\|menu.*type\")"
+    ]
+  }
+}

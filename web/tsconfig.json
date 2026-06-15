@@ -1,0 +1,16 @@
+{
+  // 根 tsconfig 主要用于串起整个 workspace 的项目引用关系，本身不直接编译源码。
+  "files": [],
+  // 这里列出所有 TS 子项目，便于 tsc -b / vue-tsc 在 monorepo 中按依赖顺序构建。
+  "references": [
+    { "path": "./packages/api" },
+    { "path": "./packages/constants" },
+    { "path": "./packages/directives" },
+    { "path": "./packages/hooks" },
+    { "path": "./packages/pc-ui" },
+    { "path": "./packages/h5-ui" },
+    { "path": "./packages/utils" },
+    { "path": "./apps/admin" },
+    { "path": "./apps/h5" }
+  ]
+}

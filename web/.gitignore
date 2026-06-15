@@ -1,0 +1,10 @@
+node_modules
+dist
+.turbo
+.pnpm-store
+.idea
+.vscode
+coverage
+*.log
+*.tsbuildinfo
+

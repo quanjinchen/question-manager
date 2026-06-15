@@ -1,0 +1,79 @@
+package cn.spring.arch.console.service.impl;
+
+import cn.spring.arch.common.constant.ResultCode;
+import cn.spring.arch.common.exception.BizException;
+import cn.spring.arch.common.pojo.RespInfo;
+import cn.spring.arch.console.pojo.req.DeleteFileReqParam;
+import cn.spring.arch.console.pojo.resp.FileUploadRespData;
+import cn.spring.arch.console.service.FileService;
+import cn.spring.arch.file.entity.FileRecord;
+import cn.spring.arch.file.manager.FileManager;
+import cn.spring.arch.file.util.FileUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
+
+@Service
+public class FileServiceImpl implements FileService {
+
+    @Resource
+    private FileManager fileManager;
+
+    @Override
+    public RespInfo<FileUploadRespData> upload(MultipartFile multipartFile, String fileCategory, String publicUrlPrefix) {
+        FileRecord fileRecord = fileManager.upload(multipartFile, fileCategory);
+        return RespInfo.success(buildUploadResp(fileRecord.getFileId(), publicUrlPrefix));
+    }
+
+    @Override
+    public RespInfo<FileUploadRespData> uploadBytes(String fileName, byte[] fileBytes, String fileCategory, String publicUrlPrefix) {
+        FileRecord fileRecord = fileManager.upload(fileName, fileBytes, fileCategory);
+        return RespInfo.success(buildUploadResp(fileRecord.getFileId(), publicUrlPrefix));
+    }
+
+    @Override
+    public RespInfo<FileUploadRespData> uploadDataUrl(String fileName, String dataUrl, String fileCategory, String publicUrlPrefix) {
+        FileRecord fileRecord = fileManager.upload(fileName, dataUrl, fileCategory);
+        return RespInfo.success(buildUploadResp(fileRecord.getFileId(), publicUrlPrefix));
+    }
+
+    @Override
+    public void download(String fileId, HttpServletResponse response) {
+        FileRecord fileRecord = fileManager.getFileByFileId(fileId);
+        if (fileRecord == null) {
+            throw ResultCode.FILE_NOT_FOUND.newException();
+        }
+
+        byte[] content = fileManager.download(fileRecord.getObjectName());
+        try {
+            response.setHeader("Content-Disposition", "inline;filename=" + URLEncoder.encode(fileRecord.getFileName(), "UTF-8"));
+        } catch (Exception exception) {
+            throw new BizException("file download failed: " + exception.getMessage());
+        }
+        response.setContentType(fileRecord.getContentType());
+        try {
+            response.getOutputStream().write(content);
+            response.getOutputStream().flush();
+        } catch (IOException exception) {
+            throw new BizException("file download failed: " + exception.getMessage());
+        }
+    }
+
+    @Override
+    public RespInfo<Void> deleteFile(DeleteFileReqParam reqParam) {
+        fileManager.delete(reqParam.getFileId());
+        return RespInfo.success();
+    }
+
+    private FileUploadRespData buildUploadResp(String fileId, String publicUrlPrefix) {
+        FileUploadRespData respData = new FileUploadRespData();
+        respData.setFileId(fileId);
+        respData.setFileUrl(FileUtils.buildFileUrl(publicUrlPrefix, fileId));
+        return respData;
+    }
+}
+

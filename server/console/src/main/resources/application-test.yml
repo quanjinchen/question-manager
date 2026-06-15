@@ -1,0 +1,124 @@
+server:
+  port: 18080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: smallAuthPlatform
+  datasource:
+    url: jdbc:mariadb://mysql-service:3306/db_small_auth_platform?useFractionalSeconds=true&useUnicode=true&characterEncoding=UTF-8&verifyServerCertificate=false&useSSL=false&requireSSL=false&zeroDateTimeBehavior=convertToNull
+    username: dev_test
+    password: ZobL!o0+eGe@HG_r
+    driver-class-name: org.mariadb.jdbc.Driver
+    druid:
+      filter:
+        stat:
+          enabled: true
+          slow-sql-millis: 500
+          log-slow-sql: true
+      validation-query: select 1
+      # 开启空闲连接检测，检查间隔由 timeBetweenEvictionRunsMillis 决定
+      test-while-idle: true
+      # 60 秒检测空闲连接是否有效
+      time-between-eviction-runs-millis: 60000    
+  redis:
+    password: DabbY!2021
+    client-name: smallAuthPlatform
+    cluster:
+      nodes:
+        - redis-cluster-service:6379
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+  flyway:
+    enabled: false
+    locations: classpath:db/migration
+
+sa-token:
+  token-name: Authorization
+  jwt-secret-key: 1051bd5c672da09bfcd7888da32784e36d013a9bf37351c3e2694199c99008df
+  timeout: 2592000
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  servlet-filter:
+    exclude-paths:
+      - /api/admin/get-captcha
+      - /api/admin/login
+      - /api/auth/get-access-token
+      - /api/face/compare
+      - /api/face/search
+      - /admin/get-captcha
+      - /admin/login
+      - /auth/get-access-token
+      - /face/compare
+      - /face/search
+      - /swagger-ui.html
+      - /swagger-ui/**
+      - /v3/api-docs/**
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+mybatis-plus:
+  global-config:
+    db-config:
+      table-prefix: tb_
+      logic-delete-field: deleted
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+
+project:
+  encryptor:
+    key: 1234567890abcdef
+    iv: abcdef1234567890
+  captcha:
+    width: 160
+    height: 60
+    code-count: 4
+    circle-count: 0
+    expire-seconds: 300
+  web:
+    interceptor:
+      exclude-paths:
+        - /auth/get-access-token
+        - /api/auth/get-access-token
+        - /face/compare
+        - /api/face/compare
+        - /face/search
+        - /api/face/search
+        - /swagger-ui.html
+        - /swagger-ui/**
+        - /v3/api-docs/**
+    request-security:
+      enabled: true
+      check-timestamp: true
+      check-request-id-repeat: true
+      timestamp-tolerance-millis: 300000
+      request-id-expire-seconds: 600
+  file:
+    endpoint: http://minio:9000
+    region: global
+    access-key: minioadmin
+    secret-key: minioadmin
+    bucket-name: iam-icon
+    path-style-access-enabled: true
+    public-url-prefix: ""
+  face:
+    model-dir: config/model
+    detector-model: face_detector.csta
+    landmarker-model: face_landmarker_pts5.csta
+    recognizer-model: face_recognizer_light.csta
+  log:
+    path: ${PROJECT_LOG_PATH:./logs}
+    max-history: ${PROJECT_LOG_MAX_HISTORY:30}
+
+logging:
+  level:
+    cn.spring.arch: info

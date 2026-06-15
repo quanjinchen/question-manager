@@ -1,0 +1,108 @@
+server:
+  port: 18081
+  servlet:
+    context-path: /auth
+
+spring:
+  application:
+    name: smallAuthPlatformAuth
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/db_small_auth_platform?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    timeout: 5s
+    client-name: db_small_auth_platform_auth
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+sa-token:
+  token-name: Authorization
+  jwt-secret-key: 1051bd5c672da09bfcd7888da32784e36d013a9bf37351c3e2694199c99008df
+  timeout: 2592000
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  servlet-filter:
+    exclude-paths:
+      - /face/query-account
+      - /auth/face/query-account
+      - /auth/register-account
+      - /auth/face/register-account
+      - /face/get-cert-token
+      - /auth/face/get-cert-token
+      - /auth/get-auth-result
+      - /auth/face/get-auth-result
+      - /swagger-ui.html
+      - /swagger-ui/**
+      - /v3/api-docs/**
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+mybatis-plus:
+  global-config:
+    db-config:
+      table-prefix: tb_
+      logic-delete-field: deleted
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+
+project:
+  encryptor:
+    key: 1234567890abcdef
+    iv: abcdef1234567890
+  web:
+    interceptor:
+      exclude-paths:
+        - /face/query-account
+        - /auth/face/query-account
+        - /auth/register-account
+        - /auth/face/register-account
+        - /auth/get-cert-token
+        - /auth/face/get-cert-token
+        - /auth/get-auth-result
+        - /auth/face/get-auth-result
+        - /swagger-ui.html
+        - /swagger-ui/**
+        - /v3/api-docs/**
+    request-security:
+      enabled: true
+      check-timestamp: true
+      check-request-id-repeat: true
+      timestamp-tolerance-millis: 300000
+      request-id-expire-seconds: 600
+  file:
+    endpoint: http://127.0.0.1:9000
+    region: us-east-1
+    access-key: minioadmin
+    secret-key: minioadmin
+    bucket-name: spring-scaffold
+    path-style-access-enabled: true
+    public-url-prefix: ""
+  face:
+    model-dir: config/model
+    detector-model: face_detector.csta
+    landmarker-model: face_landmarker_pts5.csta
+    recognizer-model: face_recognizer_light.csta
+  auth:
+    auth-url-prefix: https://xxxx.com/auth
+    cert-token-expire-seconds: 600
+    face-match-threshold: 0.75
+  log:
+    path: ${PROJECT_LOG_PATH:./logs}
+    max-history: ${PROJECT_LOG_MAX_HISTORY:30}
+
+logging:
+  level:
+    cn.spring.arch: info

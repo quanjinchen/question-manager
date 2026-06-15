@@ -1,0 +1,37 @@
+{
+  "name": "@vue-scaffold/h5",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --mode dev",
+    "build": "vite build --mode dev",
+    "build:test": "vite build --mode test",
+    "build:prod": "vite build --mode prod",
+    "typecheck": "node --max-old-space-size=4096 ../../scripts/vue-tsc.mjs --noEmit -p tsconfig.json",
+    "lint": "eslint src --ext .ts,.vue"
+  },
+  "dependencies": {
+    "@vue-scaffold/api": "workspace:*",
+    "@vue-scaffold/constants": "workspace:*",
+    "@vue-scaffold/h5-ui": "workspace:*",
+    "@vue-scaffold/utils": "workspace:*",
+    "amfe-flexible": "^2.2.1",
+    "autoprefixer": "^10.3.7",
+    "face-api.js": "^0.22.2",
+    "normalize.css": "^8.0.1",
+    "nprogress": "^0.2.0",
+    "postcss-pxtorem": "^6.0.0",
+    "vant": "^4.9.21",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@types/nprogress": "^0.2.3",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "sass": "^1.79.5",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.1",
+    "vue-tsc": "^3.0.5"
+  }
+}

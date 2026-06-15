@@ -1,0 +1,35 @@
+# Root workspace
+/node_modules/
+/.pnpm-store/
+**/.pnpm-store/
+/.turbo/
+/.idea/
+/.vscode/
+*.log
+*.tsbuildinfo
+
+# Frontend workspace
+/web/node_modules/
+/web/dist/
+/web/.turbo/
+/web/.pnpm-store/
+/web/.idea/
+/web/.vscode/
+/web/coverage/
+/web/*.log
+/web/**/*.log
+/web/*.tsbuildinfo
+/web/**/*.tsbuildinfo
+
+# Backend workspace
+/server/target/
+/server/**/target/
+/server/.idea/
+/server/*.iml
+/server/**/*.iml
+/server/.flattened-pom.xml
+/server/**/.flattened-pom.xml
+/server/logs/
+/server/**/logs/
+/server/data/
+/server/seetaface6/

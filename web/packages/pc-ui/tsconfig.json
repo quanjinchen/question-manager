@@ -1,0 +1,22 @@
+{
+  "extends": "../config/tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "tsBuildInfoFile": "../../node_modules/.cache/tsbuildinfo/pc-ui.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "@vue-scaffold/constants": ["../constants/src/index.ts"],
+      "@vue-scaffold/hooks": ["../hooks/src/index.ts"],
+      "@vue-scaffold/utils": ["../utils/src/index.ts"]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "../constants/src/**/*.ts",
+    "../hooks/src/**/*.ts",
+    "../utils/src/**/*.ts"
+  ]
+}
