@@ -16,12 +16,14 @@
             v-model="searchParams.username"
             placeholder="用户名"
             :icon-props="{ place: 'suffix', name: 'Search' }"
+            :input-props="{ clearable: true }"
             @input="dataInfo.debounceSearch()"
           />
           <AppInput
             v-model="searchParams.fullName"
             placeholder="姓名"
             :icon-props="{ place: 'suffix', name: 'Search' }"
+            :input-props="{ clearable: true }"
             @input="dataInfo.debounceSearch()"
           />
         </div>

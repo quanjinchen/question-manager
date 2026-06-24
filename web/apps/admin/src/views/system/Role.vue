@@ -8,6 +8,7 @@
               v-model="searchParams.keyword"
               placeholder="角色名称或编码"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
               @input="dataInfo.debounceSearch()"
             />
           </el-col>

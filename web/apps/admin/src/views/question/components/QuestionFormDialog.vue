@@ -103,6 +103,7 @@ const OPTION_LABELS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const props = defineProps<{
   modelValue: boolean;
   selectItem?: QuestionRecord | null;
+  defaultCategoryId?: string | number;
 }>();
 
 const emit = defineEmits<{
@@ -115,7 +116,7 @@ const visible = useVModel(props, emit as any);
 
 const dataInfo: any = reactive({
   formData: {
-    categoryId: '',
+    categoryId: '' as string | number,
     questionType: 'SINGLE',
     title: '',
     optionsJson: '',
@@ -159,7 +160,7 @@ const dataInfo: any = reactive({
     return this.optionList.map((item: Record<string, any>) => ({ label: item.label, value: item.label }));
   },
   initForm() {
-    this.formData = { categoryId: '', questionType: 'SINGLE', title: '', optionsJson: '', answer: '', analysis: '', score: 1, sortOrder: 0, status: 1 };
+    this.formData = { categoryId: props.defaultCategoryId || '', questionType: 'SINGLE', title: '', optionsJson: '', answer: '', analysis: '', score: 1, sortOrder: 0, status: 1 };
     this.optionList = defaultOptions();
     this.multipleAnswer = [];
     formRef.value?.resetFields();
@@ -200,7 +201,10 @@ const dataInfo: any = reactive({
     }
   },
   async getDetail() {
-    if (!props.selectItem?.id) return;
+    if (!props.selectItem?.id) {
+      this.formData.categoryId = props.defaultCategoryId || '';
+      return;
+    }
     const detail = await $apis.questions.detail({ id: Number(props.selectItem.id) });
     this.syncingDetail = true;
     this.formData = { ...this.formData, ...detail };

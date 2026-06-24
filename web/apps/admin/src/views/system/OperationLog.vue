@@ -8,6 +8,7 @@
               v-model="searchParams.keyword"
               placeholder="模块、动作、操作人"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
             />
           </el-col>
           <el-col :xs="24" :sm="24" :md="14" :lg="16" :xl="18">

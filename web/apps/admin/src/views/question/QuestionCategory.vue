@@ -19,6 +19,7 @@
           v-model="bankCategorySearchParams.categoryName"
           placeholder="搜索分类"
           :icon-props="{ place: 'suffix', name: 'Search' }"
+          :input-props="{ clearable: true }"
           @input="dataInfo.debounceBankCategorySearch()"
         />
         <AppSelect
@@ -61,7 +62,9 @@
       <AppPager
         v-model:page-index="bankCategoryPageInfo.pageNum"
         v-model:page-size="bankCategoryPageInfo.pageSize"
+        is-small
         :total="bankCategoryTotal"
+        :pagination-props="{ layout: 'prev,pager,next', small: true }"
         @change="dataInfo.getBankCategoryList()"
       />
     </section>
@@ -75,6 +78,7 @@
                 v-model="searchParams.categoryName"
                 placeholder="请输入题库名称"
                 :icon-props="{ place: 'suffix', name: 'Search' }"
+                :input-props="{ clearable: true }"
                 @input="dataInfo.debounceSearch()"
               />
             </el-col>
@@ -315,11 +319,13 @@ dataInfo.initData();
 
 <style scoped lang="scss">
 .QuestionCategory-root {
+  flex: 1;
   display: grid;
-  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  grid-template-columns: 300px minmax(0, 1fr);
   gap: 16px;
-  height: 100%;
+  width: 100%;
   min-height: 0;
+  overflow: hidden;
 }
 
 .category-pane,
@@ -335,7 +341,7 @@ dataInfo.initData();
   overflow: hidden;
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 
 .pane-header {
@@ -450,6 +456,11 @@ dataInfo.initData();
   overflow: hidden;
 }
 
+.category-pane :deep(.AppPager-root) {
+  justify-content: center;
+  padding-bottom: 0;
+}
+
 .current-category {
   flex: 1;
   min-width: 120px;
@@ -465,13 +476,14 @@ dataInfo.initData();
   justify-content: flex-end;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1200px) {
   .QuestionCategory-root {
     grid-template-columns: 1fr;
+    overflow: auto;
   }
 
   .category-pane {
-    max-height: 420px;
+    max-height: 360px;
   }
 
   .current-category {

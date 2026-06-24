@@ -8,6 +8,7 @@
               v-model="searchParams.orgName"
               placeholder="组织名称"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
               @input="dataInfo.debounceSearch()"
             />
           </el-col>
@@ -16,6 +17,7 @@
               v-model="searchParams.shortName"
               placeholder="组织简称"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
               @input="dataInfo.debounceSearch()"
             />
           </el-col>

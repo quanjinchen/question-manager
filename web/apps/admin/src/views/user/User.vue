@@ -9,6 +9,7 @@
               v-model="searchParams.username"
               placeholder="用户名"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
               @input="dataInfo.debounceSearch()"
             />
           </el-col>
@@ -17,6 +18,7 @@
               v-model="searchParams.fullName"
               placeholder="姓名"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
               @input="dataInfo.debounceSearch()"
             />
           </el-col>
@@ -25,6 +27,7 @@
               v-model="searchParams.phone"
               placeholder="手机号"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
               @input="dataInfo.debounceSearch()"
             />
           </el-col>
@@ -33,6 +36,7 @@
               v-model="searchParams.email"
               placeholder="邮箱"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
               @input="dataInfo.debounceSearch()"
             />
           </el-col>

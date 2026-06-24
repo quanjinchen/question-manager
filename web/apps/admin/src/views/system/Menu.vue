@@ -8,6 +8,7 @@
               v-model="searchParams.menuName"
               placeholder="菜单名称"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
             />
           </el-col>
           <el-col :xs="12" :sm="12" :md="6" :lg="5" :xl="4">
@@ -15,6 +16,7 @@
               v-model="searchParams.path"
               placeholder="路由路径"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
             />
           </el-col>
           <el-col :xs="12" :sm="12" :md="6" :lg="5" :xl="4">
@@ -22,6 +24,7 @@
               v-model="searchParams.menuCode"
               placeholder="权限编码"
               :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
             />
           </el-col>
           <el-col :xs="24" :sm="24" :md="6" :lg="9" :xl="12">

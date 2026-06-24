@@ -4,10 +4,16 @@
       <AppListHeader>
         <el-row :gutter="16" style="width: 100%">
           <el-col :xs="12" :sm="8" :md="6" :lg="5">
-            <AppInput v-model="searchParams.categoryName" placeholder="请输入分类名称" :icon-props="{ place: 'suffix', name: 'Search' }" @input="dataInfo.debounceSearch()" />
+            <AppInput
+              v-model="searchParams.categoryName"
+              placeholder="请输入分类名称"
+              :icon-props="{ place: 'suffix', name: 'Search' }"
+              :input-props="{ clearable: true }"
+              @input="dataInfo.debounceSearch()"
+            />
           </el-col>
           <el-col :xs="12" :sm="8" :md="5" :lg="4">
-            <AppSelect v-model="searchParams.status" :list="statusOptions" :select-props="{ placeholder: '请选择状态' }" @change="dataInfo.search()" />
+            <AppSelect v-model="searchParams.status" :list="statusOptions" :select-props="{ placeholder: '请选择状态', clearable: true }" @change="dataInfo.search()" />
           </el-col>
           <el-col :xs="24" :sm="8" :md="13" :lg="15">
             <div class="header-handle">
