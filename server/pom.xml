@@ -15,7 +15,7 @@
         <module>framework</module>
         <module>file</module>
         <module>console</module>
-        <module>auth</module>
+        <module>consumer</module>
     </modules>
 
     <properties>
@@ -27,6 +27,7 @@
         <springdoc.version>1.8.0</springdoc.version>
         <lombok.version>1.18.32</lombok.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <flyway.version>9.22.3</flyway.version>
         <awssdk.s3.version>2.31.4</awssdk.s3.version>
         <tika.core.version>1.28.5</tika.core.version>
         <pagehelper.version>6.1.1</pagehelper.version>
@@ -83,6 +84,16 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-mysql</artifactId>
+                <version>${flyway.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mapstruct</groupId>

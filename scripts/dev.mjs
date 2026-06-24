@@ -13,28 +13,28 @@ const tasks = {
   'admin-web': {
     cwd: webDir,
     command: 'pnpm dev',
-    url: 'http://localhost:5174',
+    url: 'http://localhost:5173',
   },
   'admin-server': {
     cwd: serverDir,
     command: [
       'mvn -pl console -am -DskipTests package',
-      'if ($LASTEXITCODE -eq 0) { java -jar .\\console\\target\\smallAuthPlatform-1.0.0.jar }',
+      'if ($LASTEXITCODE -eq 0) { New-Item -ItemType Directory -Force -Path .\\.run | Out-Null; Copy-Item -Force .\\console\\target\\smallAuthPlatform-1.0.0.jar .\\.run\\console.jar; java -jar .\\.run\\console.jar }',
     ].join('; '),
     url: 'http://localhost:18080/api',
   },
   'h5-web': {
     cwd: webDir,
     command: 'pnpm dev:h5',
-    url: 'http://localhost:5173',
+    url: 'http://localhost:5174',
   },
   'h5-server': {
     cwd: serverDir,
     command: [
-      'mvn -pl auth -am -DskipTests package',
-      'if ($LASTEXITCODE -eq 0) { java -jar .\\auth\\target\\smallauthplatform-auth-1.0.0.jar }',
+      'mvn -pl consumer -am -DskipTests package',
+      'if ($LASTEXITCODE -eq 0) { New-Item -ItemType Directory -Force -Path .\\.run | Out-Null; Copy-Item -Force .\\consumer\\target\\smallAuthPlatform-consumer-1.0.0.jar .\\.run\\consumer.jar; java -jar .\\.run\\consumer.jar }',
     ].join('; '),
-    url: 'http://localhost:18081/auth',
+    url: 'http://localhost:18082/consumer',
   },
 };
 

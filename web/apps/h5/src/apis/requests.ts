@@ -1,21 +1,28 @@
 import { appRequest } from '@/apis/app-request';
 
-export type AuthAccountParams = {
-  certToken: string;
-  fullName: string;
-  idCard: string;
-};
-
 export const $apis = {
-  auth: {
-    checkCertToken(params: Pick<AuthAccountParams, 'certToken'>) {
-      return appRequest.post('/auth/auth/check-certToken', params, { alertError: false });
+  questionPortal: {
+    login(params: Record<string, any>) {
+      return appRequest.post('/consumer/question-portal/login', params, { alertError: false });
     },
-    queryAccount(params: AuthAccountParams) {
-      return appRequest.post('/auth/auth/query-account', params, { alertError: false });
+    logout() {
+      return appRequest.post('/consumer/question-portal/logout', {});
     },
-    registerAccount(params: AuthAccountParams) {
-      return appRequest.post('/auth/auth/register-account', params);
+    listMyCategory() {
+      return appRequest.post('/consumer/question-portal/list-my-question-category', {});
+    },
+    listQuestions(params: Record<string, any>) {
+      return appRequest.get('/consumer/question-portal/list-question-by-category-id', params, {
+        appendPathOnGet: true,
+      });
+    },
+    submitAnswer(params: Record<string, any>) {
+      return appRequest.post('/consumer/question-portal/submit-question-answer', params);
+    },
+    recordDetail(params: Record<string, any>) {
+      return appRequest.get('/consumer/question-portal/get-question-answer-record-by-id', params, {
+        appendPathOnGet: true,
+      });
     }
   }
 };

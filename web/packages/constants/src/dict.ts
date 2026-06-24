@@ -3,8 +3,8 @@
 // 字典表
 export const dictStore = {
   userStatusList: [
-    { value: 0, label: '启用', type: 'success' },
-    { value: 1, label: '禁用', type: 'danger' },
+    { value: 1, label: '启用', type: 'success' },
+    { value: 0, label: '禁用', type: 'danger' },
   ],
   menuTypeList: [
     { value: "DIR", label: '目录', type: 'success' },

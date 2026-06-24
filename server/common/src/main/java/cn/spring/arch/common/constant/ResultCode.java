@@ -59,10 +59,7 @@ public enum ResultCode implements Assert {
 
     // ========== 文件错误段 [61000, 62000) ==========
     FILE_NOT_FOUND(61000, "文件不存在"),
-    FILE_NOT_EMPTY(61002, "文件内容不能为空"),
-
-    // ========== 认证平台错误段 [63000, 64000) ==========
-    AUTH_CERT_TOKEN_INVALID(63001, "certToken 无效或已过期");
+    FILE_NOT_EMPTY(61002, "文件内容不能为空");
 
     private final int code;
 

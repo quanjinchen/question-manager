@@ -39,8 +39,8 @@ export default defineConfig(({ mode }) => {
       port: Number(env.VITE_SERVER_PORT || 5174),
       strictPort: true,
       proxy: {
-        '/auth': {
-          target: env.VITE_PROXY_TARGET || 'http://127.0.0.1:18081',
+        '/consumer': {
+          target: env.VITE_CONSUMER_PROXY_TARGET || env.VITE_PROXY_TARGET || 'http://127.0.0.1:18082',
           changeOrigin: true
         }
       }

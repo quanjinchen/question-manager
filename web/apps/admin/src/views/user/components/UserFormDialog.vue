@@ -134,18 +134,17 @@ const dataInfo: any = reactive({
     phone: "",
     email: "",
     idCard: "",
-    status: 0,
+    status: 1,
     remark: "",
   },
   rules: {
     username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
     fullName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
     idCard: [
-      { required: true, message: "请输入身份证号", trigger: "blur" },
       {
         validator: (_rule: unknown, value: string, callback: (error?: Error) => void) => {
           if (!value) {
-            callback(new Error("请输入身份证号"));
+            callback();
             return;
           }
           if (!ID_CARD_PATTERN.test(value)) {
@@ -210,7 +209,7 @@ const dataInfo: any = reactive({
         phone: "",
         email: "",
         idCard: "",
-        status: 0,
+        status: 1,
         remark: "",
         ...detail,
       };

@@ -9,17 +9,6 @@ export type UserRecord = {
   remark?: string;
 };
 
-export type AppRecord = {
-  id: string;
-  appName: string;
-  appCode: string;
-  clientId: string;
-  clientSecret: string;
-  remark?: string;
-  createTime?: string;
-  updateTime?: string;
-};
-
 export type OrganizationRecord = {
   id: string;
   parentId: string | null;
@@ -53,4 +42,45 @@ export type RoleRecord = {
   remark?: string;
   createdAt: string;
   updatedAt: string;
+};
+
+export type QuestionCategoryRecord = {
+  id: string | number;
+  categoryName: string;
+  description?: string;
+  sortOrder: number;
+  status: number;
+  questionCount?: number;
+  createTime?: string;
+  updateTime?: string;
+};
+
+export type QuestionRecord = {
+  id: string | number;
+  categoryId: string | number;
+  categoryName?: string;
+  questionType: 'SINGLE' | 'MULTIPLE' | 'JUDGE' | 'QA';
+  title: string;
+  optionsJson?: string;
+  answer?: string;
+  analysis?: string;
+  score: number;
+  sortOrder: number;
+  status: number;
+  createTime?: string;
+};
+
+export type QuestionAnswerRecord = {
+  id: string | number;
+  userId: string | number;
+  username?: string;
+  fullName?: string;
+  categoryId: string | number;
+  categoryName?: string;
+  totalScore: number;
+  userScore: number;
+  questionCount: number;
+  correctCount: number;
+  createTime?: string;
+  details?: Array<Record<string, any>>;
 };

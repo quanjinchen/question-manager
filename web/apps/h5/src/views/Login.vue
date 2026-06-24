@@ -1,287 +1,93 @@
 <template>
-  <main class="login-page">
-    <div
-      v-if="tokenChecking"
-      class="page-loading"
-    >
-      <van-loading
-        color="#1f6feb"
-        size="28px"
-      />
-    </div>
-
-    <AppStateResult
-      v-else-if="tokenInvalidMessage"
-      status="fail"
-      title="认证链接已失效"
-    />
-
-    <template v-else>
-      <section class="login-panel">
-        <h1>身份信息核验</h1>
-        <p>{{ panelDescription }}</p>
-
-        <van-form
-          ref="formRef"
-          @submit="dataInfo.handleSubmit()"
-        >
-          <van-cell-group inset>
-            <van-field
-              v-model="form.fullName"
-              name="fullName"
-              label="姓名"
-              placeholder="请输入姓名"
-              :rules="[{ required: true, message: '请输入姓名' }]"
-            />
-            <van-field
-              v-model="form.idCard"
-              name="idCard"
-              label="身份证号"
-              placeholder="请输入身份证号"
-              readonly
-              clickable
-              :rules="idCardRules"
-              @click="dataInfo.showIdCardKeyboard()"
-              @focus="dataInfo.showIdCardKeyboard()"
-            />
-          </van-cell-group>
-
-          <van-number-keyboard
-            v-model="form.idCard"
-            :show="idCardKeyboardVisible"
-            theme="custom"
-            extra-key="X"
-            close-button-text="完成"
-            :maxlength="18"
-            @blur="dataInfo.hideIdCardKeyboard()"
-          />
-
-          <van-button
-            round
-            block
-            type="primary"
-            native-type="submit"
-            :loading="loading"
-            class="submit-button"
-          >
-            开始认证
-          </van-button>
-        </van-form>
-      </section>
-    </template>
+  <main class="Login-root">
+    <section class="login-panel">
+      <div class="brand">
+        <h1>题库答题系统</h1>
+        <p>登录后查看已授权题库并开始答题</p>
+      </div>
+      <van-form @submit="dataInfo.handleLogin()">
+        <van-cell-group inset>
+          <van-field v-model="formData.account" name="account" label="账号" placeholder="请输入账号" :rules="[{ required: true, message: '请输入账号' }]" />
+          <van-field v-model="formData.password" type="password" name="password" label="密码" placeholder="请输入密码" :rules="[{ required: true, message: '请输入密码' }]" />
+        </van-cell-group>
+        <div class="login-actions">
+          <van-button block type="primary" native-type="submit" :loading="loading">登录</van-button>
+        </div>
+      </van-form>
+    </section>
   </main>
 </template>
 
-<script setup lang="ts">
-import { computed, onMounted, reactive, ref, toRefs } from 'vue';
+<script setup lang="ts" name="Login">
+import { reactive, toRefs } from 'vue';
+import { useRouter } from 'vue-router';
 import { showFailToast } from 'vant';
-import { useRoute, useRouter } from 'vue-router';
 import { $apis } from '@/apis/requests';
-import AppStateResult from '@/components/AppStateResult.vue';
-import {
-  getCachedAuthIdentity,
-  setCachedAuthIdentity,
-  setCurrentAuthAccount,
-  type CachedAuthAccount
-} from '@/apis/auth-session';
-import type { AppBusinessError } from '@/apis/app-request';
+import { setCurrentAuthAccount } from '@/apis/auth-session';
 
 const router = useRouter();
-const route = useRoute();
-const formRef = ref<{ validate: (name?: string | string[]) => Promise<void> }>();
-const ID_CARD_PATTERN =
-  /^(?:[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])\d{3}[\dXx]|[1-9]\d{5}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])\d{3})$/;
 
-const certToken = computed(() => {
-  const token = route.query.certToken;
-  return Array.isArray(token) ? token[0] || '' : token || '';
-});
-
-const idCardRules = [
-  { required: true, message: '请输入身份证号' },
-  {
-    validator: (value: string) => ID_CARD_PATTERN.test(value),
-    message: '身份证号格式不正确'
-  }
-];
-
-const dataInfo = reactive({
-  form: {
-    fullName: '',
-    idCard: ''
+const dataInfo: any = reactive({
+  formData: {
+    account: '',
+    password: '',
   },
-  tokenChecking: true,
-  tokenInvalidMessage: '',
   loading: false,
-  idCardKeyboardVisible: false,
-  get panelDescription() {
-    return '请输入姓名和身份证号，继续完成身份认证';
-  },
-  get params() {
-    return {
-      certToken: certToken.value,
-      ...this.form,
-      idCard: this.form.idCard.toUpperCase()
-    };
-  },
-  async queryAccount(account: CachedAuthAccount, silentError = false) {
-    try {
-      const accountInfo = await $apis.auth.queryAccount({
-        certToken: account.certToken,
-        fullName: account.fullName,
-        idCard: account.idCard
-      });
-      setCachedAuthIdentity({
-        fullName: account.fullName,
-        idCard: account.idCard
-      });
-      setCurrentAuthAccount({
-        ...account,
-        token: accountInfo?.token || account.token || '',
-        appInfo: accountInfo?.appInfo ?? account.appInfo ?? null
-      });
-      await router.replace({
-        path: '/auth-confirm',
-        query: { certToken: account.certToken }
-      });
-      return true;
-    } catch (error) {
-      const businessError = error as AppBusinessError;
-      if (!silentError) {
-        showFailToast(businessError.message || '账户核验失败');
-        throw error;
-      }
-      return false;
-    }
-  },
-  async checkCertToken() {
-    if (!certToken.value) {
-      this.tokenInvalidMessage = 'certToken 不能为空';
-      return false;
-    }
-
-    try {
-      await $apis.auth.checkCertToken({ certToken: certToken.value });
-      return true;
-    } catch (error) {
-      const businessError = error as AppBusinessError;
-      this.tokenInvalidMessage = businessError.message || 'certToken 已失效';
-      return false;
-    }
-  },
-  async init() {
-    this.tokenChecking = true;
-    try {
-      const tokenValid = await this.checkCertToken();
-      if (!tokenValid) {
-        return;
-      }
-
-      const cachedIdentity = getCachedAuthIdentity();
-      if (!cachedIdentity) {
-        return;
-      }
-
-      const cachedAccount = {
-        certToken: certToken.value,
-        fullName: cachedIdentity.fullName,
-        idCard: cachedIdentity.idCard.toUpperCase()
-      };
-      const autoRedirected = await this.queryAccount(cachedAccount, true);
-      if (autoRedirected) {
-        return;
-      }
-
-      this.form.fullName = cachedAccount.fullName;
-      this.form.idCard = cachedAccount.idCard.toUpperCase();
-    } finally {
-      this.tokenChecking = false;
-    }
-  },
-  async handleSubmit() {
-    if (this.loading) {
-      return;
-    }
-    if (!certToken.value) {
-      showFailToast('certToken 不能为空');
-      return;
-    }
-
+  async handleLogin() {
+    if (this.loading) return;
     this.loading = true;
     try {
-      await this.queryAccount(this.params);
+      const data = await $apis.questionPortal.login(this.formData);
+      setCurrentAuthAccount({
+        userId: data.userId,
+        username: data.username,
+        fullName: data.fullName,
+        token: data.token,
+      });
+      await router.replace('/categories');
+    } catch (error: any) {
+      showFailToast(error?.message || '登录失败');
     } finally {
       this.loading = false;
     }
   },
-  showIdCardKeyboard() {
-    this.idCardKeyboardVisible = true;
-  },
-  async hideIdCardKeyboard() {
-    this.idCardKeyboardVisible = false;
-    if (this.form.idCard) {
-      try {
-        await formRef.value?.validate('idCard');
-      } catch {
-        // 关闭自定义键盘时触发一次校验，错误展示交给 van-form 自身处理。
-      }
-    }
-  }
 });
 
-onMounted(() => {
-  dataInfo.init();
-});
-
-const {
-  form,
-  tokenChecking,
-  tokenInvalidMessage,
-  loading,
-  idCardKeyboardVisible,
-  panelDescription
-} = toRefs(dataInfo);
+const { formData, loading } = toRefs(dataInfo);
 </script>
 
 <style scoped lang="scss">
-.login-page {
+.Login-root {
   min-height: 100vh;
-  background: #f6f7fb;
-}
-
-.page-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: #fff;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #f5f7fb 0%, #edf6f4 55%, #f7f3ea 100%);
 }
 
 .login-panel {
-  padding: 40px 0 24px;
+  width: min(420px, 100%);
 }
 
-h1,
-p {
-  padding: 0 24px;
+.brand {
+  margin-bottom: 24px;
+  text-align: center;
 }
 
-h1 {
-  margin: 0 0 10px;
+.brand h1 {
+  margin: 0 0 8px;
   color: #1f2937;
   font-size: 28px;
+  letter-spacing: 0;
 }
 
-p {
-  margin: 0 0 28px;
-  color: #697386;
+.brand p {
+  margin: 0;
+  color: #6b7280;
   font-size: 14px;
-  line-height: 1.6;
 }
 
-.submit-button {
-  width: calc(100% - 32px);
-  margin: 28px auto 0;
+.login-actions {
+  margin-top: 20px;
 }
-
 </style>

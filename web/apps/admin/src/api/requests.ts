@@ -7,15 +7,6 @@ export const $apis = {
     accountLogin(params: RequestParams = {}) {
       return appRequest.post('/api/admin/login', params, { needLogin: false });
     },
-    getThirdAuthCertToken(params: RequestParams = {}) {
-      return appRequest.post('/api/admin/get-third-auth-cert-token', params, { needLogin: false });
-    },
-    loginByCertToken(params: RequestParams = {}, options: AppRequestMethodOptions = {}) {
-      return appRequest.post('/api/admin/login-by-cert-token', params, {
-        needLogin: false,
-        ...options,
-      });
-    },
     logout(params: RequestParams = {}) {
       return appRequest.post('/api/admin/logout', params);
     },
@@ -56,25 +47,6 @@ export const $apis = {
     },
     resetPassword(params: RequestParams = {}) {
       return appRequest.post('/api/user/reset-user-password', params);
-    }
-  },
-  apps: {
-    list(params: RequestParams = {}) {
-      return appRequest.post('/api/app/list-app', params);
-    },
-    detail(params: RequestParams = {}) {
-      return appRequest.get('/api/app/get-app-by-id', params, {
-        appendPathOnGet: true,
-      });
-    },
-    create(params: RequestParams = {}) {
-      return appRequest.post('/api/app/create-app', params);
-    },
-    update(params: RequestParams = {}) {
-      return appRequest.post('/api/app/update-app', params);
-    },
-    delete(params: RequestParams = {}) {
-      return appRequest.post('/api/app/delete-app', params);
     }
   },
   files: {
@@ -179,6 +151,65 @@ export const $apis = {
     },
     grant(params: RequestParams = {}) {
       return appRequest.post('/api/org-user/grant-org-users', params);
+    }
+  },
+  questionCategories: {
+    list(params: RequestParams = {}) {
+      return appRequest.post('/api/question-category/list-question-category', params);
+    },
+    listAll(params: RequestParams = {}) {
+      return appRequest.post('/api/question-category/list-all-question-category', params);
+    },
+    detail(params: RequestParams = {}) {
+      return appRequest.get('/api/question-category/get-question-category-by-id', params, {
+        appendPathOnGet: true,
+      });
+    },
+    create(params: RequestParams = {}) {
+      return appRequest.post('/api/question-category/create-question-category', params);
+    },
+    update(params: RequestParams = {}) {
+      return appRequest.post('/api/question-category/update-question-category', params);
+    },
+    delete(params: RequestParams = {}) {
+      return appRequest.post('/api/question-category/delete-question-category', params);
+    },
+    grantInfo(params: RequestParams = {}) {
+      return appRequest.get('/api/question-category/get-question-category-grant-by-user-id', params, {
+        appendPathOnGet: true,
+      });
+    },
+    grant(params: RequestParams = {}) {
+      return appRequest.post('/api/question-category/grant-question-category', params);
+    }
+  },
+  questions: {
+    list(params: RequestParams = {}) {
+      return appRequest.post('/api/question/list-question', params);
+    },
+    detail(params: RequestParams = {}) {
+      return appRequest.get('/api/question/get-question-by-id', params, {
+        appendPathOnGet: true,
+      });
+    },
+    create(params: RequestParams = {}) {
+      return appRequest.post('/api/question/create-question', params);
+    },
+    update(params: RequestParams = {}) {
+      return appRequest.post('/api/question/update-question', params);
+    },
+    delete(params: RequestParams = {}) {
+      return appRequest.post('/api/question/delete-question', params);
+    }
+  },
+  questionAnswerRecords: {
+    list(params: RequestParams = {}) {
+      return appRequest.post('/api/question-answer-record/list-question-answer-record', params);
+    },
+    detail(params: RequestParams = {}) {
+      return appRequest.get('/api/question-answer-record/get-question-answer-record-by-id', params, {
+        appendPathOnGet: true,
+      });
     }
   }
 };

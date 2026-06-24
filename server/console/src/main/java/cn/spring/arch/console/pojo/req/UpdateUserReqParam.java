@@ -3,7 +3,6 @@ package cn.spring.arch.console.pojo.req;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -27,7 +26,6 @@ public class UpdateUserReqParam {
     private String phone;
 
     @Schema(description = "身份证号", example = "110101199001011234")
-    @NotBlank(message = "身份证号不能为空")
     private String idCard;
 
     @Schema(description = "状态，1 启用，0 禁用", example = "1")

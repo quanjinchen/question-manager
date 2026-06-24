@@ -9,6 +9,8 @@
     "dev": "pnpm dev:admin-web",
     "dev:admin-web": "node ./scripts/dev.mjs admin-web",
     "dev:admin-server": "node ./scripts/dev.mjs admin-server",
+    "dev:consumer-web": "node ./scripts/dev.mjs h5-web",
+    "dev:consumer-server": "node ./scripts/dev.mjs h5-server",
     "dev:h5-web": "node ./scripts/dev.mjs h5-web",
     "dev:h5-server": "node ./scripts/dev.mjs h5-server",
     "backend:deps": "mvn -f ./server/pom.xml dependency:resolve"

@@ -7,7 +7,7 @@ const router = createRouter({
       path: '/',
       name: 'root',
       meta: {
-        title: '身份认证'
+        title: '题库登录'
       },
       component: () => import('@/views/Login.vue')
     },
@@ -15,26 +15,34 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       meta: {
-        title: '身份认证'
+        title: '题库登录'
       },
       component: () => import('@/views/Login.vue')
     },
     {
-      path: '/auth-confirm',
-      name: 'authConfirm',
+      path: '/categories',
+      name: 'categories',
       meta: {
-        title: '授权确认'
+        title: '我的题库'
       },
-      component: () => import('@/views/AuthConfirm.vue')
+      component: () => import('@/views/CategoryList.vue')
     },
     {
-      path: '/auth-result',
-      name: 'authResult',
+      path: '/answer/:categoryId',
+      name: 'answer',
       meta: {
-        title: '认证结果'
+        title: '在线答题'
       },
-      component: () => import('@/views/AuthResult.vue')
-    }
+      component: () => import('@/views/Answer.vue')
+    },
+    {
+      path: '/score/:recordId',
+      name: 'score',
+      meta: {
+        title: '答题成绩'
+      },
+      component: () => import('@/views/Score.vue')
+    },
   ]
 });
 

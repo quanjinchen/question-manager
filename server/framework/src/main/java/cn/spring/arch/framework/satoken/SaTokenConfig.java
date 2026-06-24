@@ -37,15 +37,31 @@ public class SaTokenConfig {
 
     @Bean
     public SaServletFilter saServletFilter() {
+        String[] excludePaths = servletFilterConfig.getExcludePaths();
         return new SaServletFilter()
                 .addInclude("/**")
-                .addExclude(servletFilterConfig.getExcludePaths())
-                .setAuth(obj -> SaRouter.match("/**", StpUtil::checkLogin))
+                .addExclude(excludePaths)
+                .setAuth(obj -> {
+                    String requestPath = SaHolder.getRequest().getRequestPath();
+                    if (isExcluded(excludePaths, requestPath)) {
+                        return;
+                    }
+                    StpUtil.checkLogin();
+                })
                 .setError(error -> {
                     log.warn("sa-token filter error: {}", error.getMessage(), error);
                     SaHolder.getResponse().setHeader("Content-Type", "application/json;charset=UTF-8");
                     return JsonUtils.toJson(RespInfo.failed(ResultCode.UNAUTHORIZED));
                 });
+    }
+
+    private boolean isExcluded(String[] excludePaths, String requestPath) {
+        for (String excludePath : excludePaths) {
+            if (SaRouter.isMatch(excludePath, requestPath)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

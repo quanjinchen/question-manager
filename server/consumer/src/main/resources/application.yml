@@ -1,0 +1,75 @@
+server:
+  port: 18082
+  servlet:
+    context-path: /consumer
+
+spring:
+  application:
+    name: questionConsumer
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/question?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    timeout: 5s
+    client-name: question_consumer
+
+sa-token:
+  token-name: Authorization
+  jwt-secret-key: 1051bd5c672da09bfcd7888da32784e36d013a9bf37351c3e2694199c99008df
+  timeout: 2592000
+  active-timeout: -1
+  is-concurrent: true
+  is-share: true
+  token-style: uuid
+  servlet-filter:
+    exclude-paths:
+      - /consumer/question-portal/login
+      - /question-portal/login
+      - /swagger-ui.html
+      - /swagger-ui/**
+      - /v3/api-docs/**
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+mybatis-plus:
+  global-config:
+    db-config:
+      table-prefix: tb_
+      logic-delete-field: deleted
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+
+project:
+  encryptor:
+    key: 1234567890abcdef
+    iv: abcdef1234567890
+  web:
+    interceptor:
+      exclude-paths:
+        - /question-portal/login
+        - /consumer/question-portal/login
+        - /swagger-ui.html
+        - /swagger-ui/**
+        - /v3/api-docs/**
+    request-security:
+      enabled: true
+      check-timestamp: true
+      check-request-id-repeat: true
+      timestamp-tolerance-millis: 300000
+      request-id-expire-seconds: 600
+  log:
+    path: ${PROJECT_LOG_PATH:./logs}
+    max-history: ${PROJECT_LOG_MAX_HISTORY:30}
+
+logging:
+  level:
+    cn.spring.arch: info

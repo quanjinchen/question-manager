@@ -73,6 +73,9 @@ public class AdminAuthServiceImpl implements AdminAuthService {
 
         User admin = userManager.getByAccount(reqParam.getAccount());
         ResultCode.ACCOUNT_OR_PASSWORD_INVALID.assertNotNull(admin);
+        if (admin.getStatus() != null && admin.getStatus() != 1) {
+            throw ResultCode.FORBIDDEN.newException("账号已禁用");
+        }
         boolean accountMatched = admin.getUsername().equals(reqParam.getAccount());
         ResultCode.ACCOUNT_OR_PASSWORD_INVALID.assertIsTrue(accountMatched);
 
@@ -97,6 +100,10 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         Long loginUserId = StpUtil.getLoginIdAsLong();
         User admin = userManager.getById(loginUserId);
         ResultCode.NOT_LOGGED_IN.assertNotNull(admin);
+        if (admin.getStatus() != null && admin.getStatus() != 1) {
+            StpUtil.logout();
+            throw ResultCode.FORBIDDEN.newException("账号已禁用");
+        }
         LoginData loginData = new LoginData();
         loginData.setAdminId(admin.getId());
         loginData.setUsername(admin.getUsername());

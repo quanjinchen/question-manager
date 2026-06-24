@@ -9,7 +9,9 @@ const OperationLog = () => import('@/views/system/OperationLog.vue');
 const Organization = () => import('@/views/organization/Organization.vue');
 const User = () => import('@/views/user/User.vue');
 const Role = () => import('@/views/system/Role.vue');
-const Application = () => import('@/views/application/Application.vue');
+const QuestionCategory = () => import('@/views/question/QuestionCategory.vue');
+const QuestionItem = () => import('@/views/question/QuestionItem.vue');
+const QuestionRecord = () => import('@/views/question/QuestionRecord.vue');
 
 // 固定路由：无论是否登录、是否有权限都需要提前存在的页面。
 export const constantRoutes: RouteRecordRaw[] = [
@@ -76,16 +78,6 @@ export const localRoutes: RouteRecordRaw[] = [
     }
   },
   {
-    path: '/application',
-    name: 'application',
-    component: Application,
-    meta: {
-      title: '应用管理',
-      icon: 'Grid',
-      permissions: 'system:app:query'
-    }
-  },
-  {
     path: '/system/menu',
     name: 'system-menu',
     component: Menu,
@@ -103,6 +95,36 @@ export const localRoutes: RouteRecordRaw[] = [
       title: '平台角色',
       icon: 'Setting',
       permissions: 'system:role:query'
+    }
+  },
+  {
+    path: '/question/category',
+    name: 'question-category',
+    component: QuestionCategory,
+    meta: {
+      title: '题目分类',
+      icon: 'FolderOpened',
+      permissions: 'question:category:query'
+    }
+  },
+  {
+    path: '/question/item',
+    name: 'question-item',
+    component: QuestionItem,
+    meta: {
+      title: '题目管理',
+      icon: 'Tickets',
+      permissions: 'question:item:query'
+    }
+  },
+  {
+    path: '/question/record',
+    name: 'question-record',
+    component: QuestionRecord,
+    meta: {
+      title: '答题记录',
+      icon: 'DocumentChecked',
+      permissions: 'question:record:query'
     }
   },
   {

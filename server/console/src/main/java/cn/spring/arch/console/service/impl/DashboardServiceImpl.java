@@ -71,7 +71,7 @@ public class DashboardServiceImpl implements DashboardService {
     ) {
         int enabledUserCount = 0;
         for (User user : users) {
-            if (user.getStatus() != null && user.getStatus().intValue() == 0) {
+            if (user.getStatus() != null && user.getStatus().intValue() == 1) {
                 enabledUserCount++;
             }
         }
