@@ -64,7 +64,7 @@
         v-model:page-size="bankCategoryPageInfo.pageSize"
         is-small
         :total="bankCategoryTotal"
-        :pagination-props="{ layout: 'prev,pager,next', small: true }"
+        :pagination-props="{ layout: 'total,prev,pager,next', small: true }"
         @change="dataInfo.getBankCategoryList()"
       />
     </section>
@@ -201,7 +201,7 @@ const dataInfo: any = reactive({
     this.getBankCategoryList().then(() => this.search());
   },
   debounceBankCategorySearch: $utils.Tool.debounce(function (this: any) {
-    this.searchBankCategory();
+    dataInfo.searchBankCategory();
   }, 300),
   async getList() {
     if (!this.selectedBankCategoryId) {
@@ -459,6 +459,8 @@ dataInfo.initData();
 .category-pane :deep(.AppPager-root) {
   justify-content: center;
   padding-bottom: 0;
+  flex-wrap: wrap;
+  row-gap: 6px;
 }
 
 .current-category {

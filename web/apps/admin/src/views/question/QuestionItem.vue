@@ -46,7 +46,7 @@
         v-model:page-size="categoryPageInfo.pageSize"
         is-small
         :total="categoryTotal"
-        :pagination-props="{ layout: 'prev,pager,next', small: true }"
+        :pagination-props="{ layout: 'total,prev,pager,next', small: true }"
         @change="dataInfo.getCategoryList()"
       />
     </section>
@@ -366,6 +366,8 @@ dataInfo.initData();
 .bank-pane :deep(.AppPager-root) {
   justify-content: center;
   padding-bottom: 0;
+  flex-wrap: wrap;
+  row-gap: 6px;
 }
 
 .header-handle {
