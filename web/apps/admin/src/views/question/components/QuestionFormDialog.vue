@@ -3,8 +3,8 @@
     <el-form ref="formRef" v-loading="loading" :model="formData" :rules="dataInfo.rules" label-position="top">
       <el-row :gutter="16">
         <el-col :span="12">
-          <el-form-item label="所属分类" prop="categoryId">
-            <AppSelect v-model="formData.categoryId" :list="categoryOptions" :select-props="{ placeholder: '请选择所属分类' }" />
+          <el-form-item label="所属题库" prop="categoryId">
+            <AppSelect v-model="formData.categoryId" :list="categoryOptions" :select-props="{ placeholder: '请选择所属题库' }" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -130,7 +130,7 @@ const dataInfo: any = reactive({
   categories: [] as Array<Record<string, any>>,
   syncingDetail: false,
   rules: {
-    categoryId: [{ required: true, message: '请选择所属分类', trigger: 'change' }],
+    categoryId: [{ required: true, message: '请选择所属题库', trigger: 'change' }],
     questionType: [{ required: true, message: '请选择题型', trigger: 'change' }],
     title: [{ required: true, message: '请输入题干', trigger: 'blur' }],
     answer: [{ required: true, message: '请输入正确答案或参考答案', trigger: 'blur' }],

@@ -2,7 +2,7 @@ export default {
   columns: [
     { key: 'ordinal', label: '#', genre: '$ordinal', width: 64 },
     { prop: 'title', label: '题干', minWidth: 280 },
-    { prop: 'categoryName', label: '所属分类', minWidth: 160 },
+    { prop: 'categoryName', label: '所属题库', minWidth: 160 },
     { prop: 'questionType', label: '题型', genre: '$slot', width: 110 },
     { prop: 'score', label: '分值', width: 100 },
     { prop: 'sortOrder', label: '排序', width: 100 },

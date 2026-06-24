@@ -33,3 +33,4 @@
 /server/**/logs/
 /server/data/
 /server/seetaface6/
+/server/.run/**

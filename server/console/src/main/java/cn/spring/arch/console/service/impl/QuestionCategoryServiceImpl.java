@@ -11,9 +11,11 @@ import cn.spring.arch.console.pojo.req.question.UpdateQuestionCategoryReqParam;
 import cn.spring.arch.console.pojo.resp.question.QuestionCategoryDTO;
 import cn.spring.arch.console.pojo.resp.question.QuestionCategoryGrantDTO;
 import cn.spring.arch.console.service.QuestionCategoryService;
+import cn.spring.arch.system.entity.QuestionBankCategory;
 import cn.spring.arch.system.entity.QuestionCategory;
 import cn.spring.arch.system.entity.QuestionCategoryGrant;
 import cn.spring.arch.system.entity.User;
+import cn.spring.arch.system.manager.QuestionBankCategoryManager;
 import cn.spring.arch.system.manager.QuestionCategoryGrantManager;
 import cn.spring.arch.system.manager.QuestionCategoryManager;
 import cn.spring.arch.system.manager.QuestionManager;
@@ -34,6 +36,8 @@ import java.util.stream.Collectors;
 public class QuestionCategoryServiceImpl implements QuestionCategoryService {
 
     @Resource
+    private QuestionBankCategoryManager questionBankCategoryManager;
+    @Resource
     private QuestionCategoryManager questionCategoryManager;
     @Resource
     private QuestionManager questionManager;
@@ -45,9 +49,12 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
     @Override
     public RespInfo<Void> createQuestionCategory(CreateQuestionCategoryReqParam reqParam) {
         QuestionCategory sameNameCategory = questionCategoryManager.getByName(reqParam.getCategoryName());
-        ResultCode.BAD_REQUEST.assertIsFalse(sameNameCategory != null, "题目分类名称已存在");
+        ResultCode.BAD_REQUEST.assertIsFalse(sameNameCategory != null, "题库名称已存在");
+        QuestionBankCategory bankCategory = questionBankCategoryManager.getById(reqParam.getBankCategoryId());
+        ResultCode.BAD_REQUEST.assertNotNull(bankCategory, "题库分类不存在");
 
         QuestionCategory category = new QuestionCategory();
+        category.setBankCategoryId(reqParam.getBankCategoryId());
         category.setCategoryName(reqParam.getCategoryName());
         category.setDescription(reqParam.getDescription());
         category.setSortOrder(reqParam.getSortOrder() == null ? 0 : reqParam.getSortOrder());
@@ -59,11 +66,14 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
     @Override
     public RespInfo<Void> updateQuestionCategory(UpdateQuestionCategoryReqParam reqParam) {
         QuestionCategory category = questionCategoryManager.getById(reqParam.getId());
-        ResultCode.BAD_REQUEST.assertNotNull(category, "题目分类不存在");
+        ResultCode.BAD_REQUEST.assertNotNull(category, "题库不存在");
 
         QuestionCategory sameNameCategory = questionCategoryManager.getByName(reqParam.getCategoryName());
-        ResultCode.BAD_REQUEST.assertIsFalse(sameNameCategory != null && !Objects.equals(sameNameCategory.getId(), reqParam.getId()), "题目分类名称已存在");
+        ResultCode.BAD_REQUEST.assertIsFalse(sameNameCategory != null && !Objects.equals(sameNameCategory.getId(), reqParam.getId()), "题库名称已存在");
+        QuestionBankCategory bankCategory = questionBankCategoryManager.getById(reqParam.getBankCategoryId());
+        ResultCode.BAD_REQUEST.assertNotNull(bankCategory, "题库分类不存在");
 
+        category.setBankCategoryId(reqParam.getBankCategoryId());
         category.setCategoryName(reqParam.getCategoryName());
         category.setDescription(reqParam.getDescription());
         category.setSortOrder(reqParam.getSortOrder() == null ? 0 : reqParam.getSortOrder());
@@ -75,8 +85,8 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
     @Override
     public RespInfo<Void> deleteQuestionCategory(DeleteQuestionCategoryReqParam reqParam) {
         QuestionCategory category = questionCategoryManager.getById(reqParam.getCategoryId());
-        ResultCode.BAD_REQUEST.assertNotNull(category, "题目分类不存在");
-        ResultCode.DATA_IN_USE.assertIsTrue(questionManager.countByCategoryId(reqParam.getCategoryId()) == 0, "分类下存在题目，无法删除");
+        ResultCode.BAD_REQUEST.assertNotNull(category, "题库不存在");
+        ResultCode.DATA_IN_USE.assertIsTrue(questionManager.countByCategoryId(reqParam.getCategoryId()) == 0, "题库下存在题目，无法删除");
         questionCategoryManager.deleteById(reqParam.getCategoryId());
         return RespInfo.success();
     }
@@ -84,7 +94,7 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
     @Override
     public RespInfo<QuestionCategoryDTO> getQuestionCategoryById(Long id) {
         QuestionCategory category = questionCategoryManager.getById(id);
-        ResultCode.BAD_REQUEST.assertNotNull(category, "题目分类不存在");
+        ResultCode.BAD_REQUEST.assertNotNull(category, "题库不存在");
         return RespInfo.success(convertCategory(category));
     }
 
@@ -92,6 +102,7 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
     public RespInfo<PageData<QuestionCategoryDTO>> listQuestionCategory(ListQuestionCategoryReqParam reqParam) {
         PageHelper.startPage(reqParam.getPageNum(), reqParam.getPageSize());
         ListQuestionCategoryQuery query = new ListQuestionCategoryQuery();
+        query.setBankCategoryId(reqParam.getBankCategoryId());
         query.setCategoryName(reqParam.getCategoryName());
         query.setStatus(reqParam.getStatus());
         List<QuestionCategory> categories = questionCategoryManager.listQuestionCategory(query);
@@ -128,7 +139,7 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
         ResultCode.USER_NOT_FOUND.assertNotNull(user);
         List<Long> categoryIds = reqParam.getCategoryIds() == null ? new ArrayList<Long>() : reqParam.getCategoryIds();
         if (!categoryIds.isEmpty()) {
-            ResultCode.BAD_REQUEST.assertIsTrue(questionCategoryManager.listByIds(categoryIds).size() == categoryIds.size(), "存在无效题目分类");
+            ResultCode.BAD_REQUEST.assertIsTrue(questionCategoryManager.listByIds(categoryIds).size() == categoryIds.size(), "存在无效题库");
         }
         questionCategoryGrantManager.deleteByUserId(reqParam.getUserId());
         questionCategoryGrantManager.saveBatch(reqParam.getUserId(), categoryIds);
@@ -138,6 +149,9 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
     private QuestionCategoryDTO convertCategory(QuestionCategory category) {
         QuestionCategoryDTO dto = new QuestionCategoryDTO();
         dto.setId(category.getId());
+        dto.setBankCategoryId(category.getBankCategoryId());
+        QuestionBankCategory bankCategory = questionBankCategoryManager.getById(category.getBankCategoryId());
+        dto.setBankCategoryName(bankCategory == null ? "" : bankCategory.getCategoryName());
         dto.setCategoryName(category.getCategoryName());
         dto.setDescription(category.getDescription());
         dto.setSortOrder(category.getSortOrder());
@@ -148,4 +162,3 @@ public class QuestionCategoryServiceImpl implements QuestionCategoryService {
         return dto;
     }
 }
-

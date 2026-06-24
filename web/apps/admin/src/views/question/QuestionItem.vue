@@ -4,7 +4,7 @@
       <AppListHeader>
         <el-row :gutter="16" style="width: 100%">
           <el-col :xs="12" :sm="8" :md="5">
-            <AppSelect v-model="searchParams.categoryId" :list="categoryOptions" :select-props="{ placeholder: '请选择所属分类' }" @change="dataInfo.search()" />
+            <AppSelect v-model="searchParams.categoryId" :list="categoryOptions" :select-props="{ placeholder: '请选择所属题库' }" @change="dataInfo.search()" />
           </el-col>
           <el-col :xs="12" :sm="8" :md="5">
             <AppSelect v-model="searchParams.questionType" :list="questionTypeOptions" :select-props="{ placeholder: '请选择题型' }" @change="dataInfo.search()" />

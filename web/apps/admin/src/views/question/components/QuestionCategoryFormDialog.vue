@@ -3,8 +3,13 @@
     <el-form ref="formRef" v-loading="loading" :model="formData" :rules="dataInfo.rules" label-position="top">
       <el-row :gutter="16">
         <el-col :span="12">
-          <el-form-item label="分类名称" prop="categoryName">
-            <AppInput v-model="formData.categoryName" v-trim placeholder="请输入分类名称" />
+          <el-form-item label="题库名称" prop="categoryName">
+            <AppInput v-model="formData.categoryName" v-trim placeholder="请输入题库名称" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="题库分类" prop="bankCategoryId">
+            <AppSelect v-model="formData.bankCategoryId" :list="bankCategoryOptions" :select-props="{ placeholder: '请选择题库分类' }" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -18,8 +23,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="分类描述" prop="description">
-            <AppInput v-model="formData.description" placeholder="请输入分类描述" :input-props="{ type: 'textarea', rows: 3 }" />
+          <el-form-item label="题库描述" prop="description">
+            <AppInput v-model="formData.description" placeholder="请输入题库描述" :input-props="{ type: 'textarea', rows: 3 }" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -43,6 +48,7 @@ const statusOptions = [
 const props = defineProps<{
   modelValue: boolean;
   selectItem?: QuestionCategoryRecord | null;
+  defaultBankCategoryId?: string | number;
 }>();
 
 const emit = defineEmits<{
@@ -53,15 +59,20 @@ const emit = defineEmits<{
 const formRef = ref<FormInstance>();
 const visible = useVModel(props, emit as any);
 
+const emptyForm = () => ({
+  bankCategoryId: '' as string | number,
+  categoryName: '',
+  description: '',
+  sortOrder: 0,
+  status: 1,
+});
+
 const dataInfo: any = reactive({
-  formData: {
-    categoryName: '',
-    description: '',
-    sortOrder: 0,
-    status: 1,
-  },
+  formData: emptyForm(),
+  bankCategories: [] as Array<Record<string, any>>,
   rules: {
-    categoryName: [{ required: true, message: '请输入分类名称', trigger: 'blur' }],
+    bankCategoryId: [{ required: true, message: '请选择题库分类', trigger: 'change' }],
+    categoryName: [{ required: true, message: '请输入题库名称', trigger: 'blur' }],
     status: [{ required: true, message: '请选择状态', trigger: 'change' }],
   },
   loading: false,
@@ -69,20 +80,30 @@ const dataInfo: any = reactive({
   get isEdit() {
     return Boolean(props.selectItem?.id);
   },
+  get bankCategoryOptions() {
+    return this.bankCategories.map((item: Record<string, any>) => ({ label: item.categoryName, value: Number(item.id) }));
+  },
   initForm() {
-    this.formData = { categoryName: '', description: '', sortOrder: 0, status: 1 };
+    this.formData = { ...emptyForm(), bankCategoryId: props.defaultBankCategoryId || '' };
     formRef.value?.resetFields();
     formRef.value?.clearValidate();
   },
-  async getDetail() {
-    if (!props.selectItem?.id) return;
+  async initData() {
     this.loading = true;
     try {
-      const detail = await $apis.questionCategories.detail({ id: Number(props.selectItem.id) });
-      this.formData = { categoryName: '', description: '', sortOrder: 0, status: 1, ...detail };
+      this.bankCategories = await $apis.questionBankCategories.listAll();
+      await this.getDetail();
     } finally {
       this.loading = false;
     }
+  },
+  async getDetail() {
+    if (!props.selectItem?.id) {
+      this.formData = { ...emptyForm(), bankCategoryId: props.defaultBankCategoryId || '' };
+      return;
+    }
+    const detail = await $apis.questionCategories.detail({ id: Number(props.selectItem.id) });
+    this.formData = { ...emptyForm(), ...detail };
   },
   async handleSubmit() {
     await formRef.value?.validate();
@@ -102,7 +123,7 @@ const dataInfo: any = reactive({
 });
 
 const modalProps = computed(() => ({
-  title: `${dataInfo.isEdit ? '编辑' : '新增'}题目分类`,
+  title: `${dataInfo.isEdit ? '编辑' : '新增'}题库`,
   width: 680,
 }));
 
@@ -123,8 +144,8 @@ watch(visible, (value) => {
     dataInfo.initForm();
     return;
   }
-  dataInfo.getDetail();
+  dataInfo.initData();
 });
 
-const { formData, loading } = toRefs(dataInfo);
+const { formData, loading, bankCategoryOptions } = toRefs(dataInfo);
 </script>

@@ -16,6 +16,8 @@ public interface QuestionCategoryManager {
 
     List<QuestionCategory> listByIds(Collection<Long> ids);
 
+    long countByBankCategoryId(Long bankCategoryId);
+
     QuestionCategory save(QuestionCategory category);
 
     void deleteById(Long id);

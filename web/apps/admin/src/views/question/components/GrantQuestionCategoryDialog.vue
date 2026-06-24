@@ -10,7 +10,7 @@
             @change="dataInfo.getGrantInfo()"
           />
         </el-form-item>
-        <el-form-item label="可见题目分类">
+        <el-form-item label="可见题库">
           <el-checkbox-group v-model="formData.categoryIds">
             <el-checkbox v-for="item in categoryOptions" :key="item.value" :label="item.value">
               {{ item.label }}
@@ -109,7 +109,7 @@ const dataInfo: any = reactive({
   },
 });
 
-const modalProps = computed(() => ({ title: '题目分类授权', width: 680 }));
+const modalProps = computed(() => ({ title: '题库授权', width: 680 }));
 const footerProps = computed(() => ({
   buttons: [
     { text: '取消', close: true, buttonProps: {} },

@@ -40,6 +40,9 @@ public class QuestionCategoryManagerImpl implements QuestionCategoryManager {
                 .orderByAsc(QuestionCategory::getSortOrder)
                 .orderByDesc(QuestionCategory::getId);
         if (query != null) {
+            if (query.getBankCategoryId() != null) {
+                wrapper.eq(QuestionCategory::getBankCategoryId, query.getBankCategoryId());
+            }
             if (StringUtils.hasText(query.getCategoryName())) {
                 wrapper.like(QuestionCategory::getCategoryName, query.getCategoryName());
             }
@@ -56,6 +59,12 @@ public class QuestionCategoryManagerImpl implements QuestionCategoryManager {
             return Collections.emptyList();
         }
         return questionCategoryMapper.selectBatchIds(ids);
+    }
+
+    @Override
+    public long countByBankCategoryId(Long bankCategoryId) {
+        return questionCategoryMapper.selectCount(new LambdaQueryWrapper<QuestionCategory>()
+                .eq(QuestionCategory::getBankCategoryId, bankCategoryId));
     }
 
     @Override

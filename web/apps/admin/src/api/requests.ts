@@ -153,6 +153,28 @@ export const $apis = {
       return appRequest.post('/api/org-user/grant-org-users', params);
     }
   },
+  questionBankCategories: {
+    list(params: RequestParams = {}) {
+      return appRequest.post('/api/question-bank-category/list-question-bank-category', params);
+    },
+    listAll(params: RequestParams = {}) {
+      return appRequest.post('/api/question-bank-category/list-all-question-bank-category', params);
+    },
+    detail(params: RequestParams = {}) {
+      return appRequest.get('/api/question-bank-category/get-question-bank-category-by-id', params, {
+        appendPathOnGet: true,
+      });
+    },
+    create(params: RequestParams = {}) {
+      return appRequest.post('/api/question-bank-category/create-question-bank-category', params);
+    },
+    update(params: RequestParams = {}) {
+      return appRequest.post('/api/question-bank-category/update-question-bank-category', params);
+    },
+    delete(params: RequestParams = {}) {
+      return appRequest.post('/api/question-bank-category/delete-question-bank-category', params);
+    }
+  },
   questionCategories: {
     list(params: RequestParams = {}) {
       return appRequest.post('/api/question-category/list-question-category', params);

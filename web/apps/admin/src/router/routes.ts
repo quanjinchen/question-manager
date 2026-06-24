@@ -10,6 +10,7 @@ const Organization = () => import('@/views/organization/Organization.vue');
 const User = () => import('@/views/user/User.vue');
 const Role = () => import('@/views/system/Role.vue');
 const QuestionCategory = () => import('@/views/question/QuestionCategory.vue');
+const QuestionBankCategory = QuestionCategory;
 const QuestionItem = () => import('@/views/question/QuestionItem.vue');
 const QuestionRecord = () => import('@/views/question/QuestionRecord.vue');
 
@@ -98,12 +99,22 @@ export const localRoutes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/question/bank-category',
+    name: 'question-bank-category',
+    component: QuestionBankCategory,
+    meta: {
+      title: '题库分类',
+      icon: 'FolderOpened',
+      permissions: 'question:bankCategory:query'
+    }
+  },
+  {
     path: '/question/category',
     name: 'question-category',
     component: QuestionCategory,
     meta: {
-      title: '题目分类',
-      icon: 'FolderOpened',
+      title: '题库',
+      icon: 'Collection',
       permissions: 'question:category:query'
     }
   },

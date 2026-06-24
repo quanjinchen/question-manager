@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class QuestionCategory extends BaseEntity {
 
+    private Long bankCategoryId;
+
     private String categoryName;
 
     private String description;

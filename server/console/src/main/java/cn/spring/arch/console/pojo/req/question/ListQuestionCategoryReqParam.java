@@ -9,10 +9,12 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class ListQuestionCategoryReqParam extends PageReqParam {
 
-    @Schema(description = "分类名称")
+    @Schema(description = "题库分类 ID")
+    private Long bankCategoryId;
+
+    @Schema(description = "题库名称")
     private String categoryName;
 
     @Schema(description = "状态")
     private Integer status;
 }
-

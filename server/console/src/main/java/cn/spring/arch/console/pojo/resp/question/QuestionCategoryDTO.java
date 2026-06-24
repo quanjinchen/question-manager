@@ -8,13 +8,19 @@ import java.time.LocalDateTime;
 @Data
 public class QuestionCategoryDTO {
 
-    @Schema(description = "分类 ID")
+    @Schema(description = "题库 ID")
     private Long id;
 
-    @Schema(description = "分类名称")
+    @Schema(description = "题库分类 ID")
+    private Long bankCategoryId;
+
+    @Schema(description = "题库分类名称")
+    private String bankCategoryName;
+
+    @Schema(description = "题库名称")
     private String categoryName;
 
-    @Schema(description = "分类描述")
+    @Schema(description = "题库描述")
     private String description;
 
     @Schema(description = "排序值")
@@ -32,4 +38,3 @@ public class QuestionCategoryDTO {
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 }
-

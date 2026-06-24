@@ -46,11 +46,24 @@ export type RoleRecord = {
 
 export type QuestionCategoryRecord = {
   id: string | number;
+  bankCategoryId: string | number;
+  bankCategoryName?: string;
   categoryName: string;
   description?: string;
   sortOrder: number;
   status: number;
   questionCount?: number;
+  createTime?: string;
+  updateTime?: string;
+};
+
+export type QuestionBankCategoryRecord = {
+  id: string | number;
+  categoryName: string;
+  description?: string;
+  sortOrder: number;
+  status: number;
+  bankCount?: number;
   createTime?: string;
   updateTime?: string;
 };
